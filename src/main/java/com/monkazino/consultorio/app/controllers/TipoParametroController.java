@@ -60,7 +60,7 @@ public class TipoParametroController {
 		return "tipoParametro/verTipoParametro";
 	}
 
-	@RequestMapping(value = {"/tipoParametro/listarTipoParametro"}, method = RequestMethod.GET)
+	@RequestMapping(value = {"/tipoParametro/listarTipoParametro", "/"}, method = RequestMethod.GET)
 	public String listarTipoParametro(@RequestParam(name = "page", defaultValue = "0") int page, Model model,
 			Authentication authentication,
 			HttpServletRequest request) {
