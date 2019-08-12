@@ -6,8 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.monkazino.consultorio.app.models.entity.Cliente;
-import com.monkazino.consultorio.app.models.entity.Factura;
-import com.monkazino.consultorio.app.models.entity.Producto;
 
 public interface IClienteService {
 
@@ -19,20 +17,6 @@ public interface IClienteService {
 	
 	public Cliente findOne(Long id);
 	
-	public Cliente fetchByIdWithFacturas(Long id);
-	
 	public void delete(Long id);
 	
-	public List<Producto> findByNombre(String term);
-	
-	public void saveFactura(Factura factura);
-	
-	public Producto findProductoById(Long id);
-	
-	public Factura findFacturaById(Long id);
-	
-	public void deleteFactura(Long id);
-	
-	public Factura fetchFacturaByIdWithClienteWhithItemFacturaWithProducto(Long id);
-
 }

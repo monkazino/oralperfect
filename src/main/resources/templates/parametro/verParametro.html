@@ -12,9 +12,6 @@
 				
 				<h4 class="card-title">
 					<a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-primary btn-xs"
-						th:href="@{'/factura/form/' + 1}"
-						th:text="'Crear Parametro'"></a>
-					<a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-primary btn-xs"
 						th:href="@{'/tipoParametro/listarTipoParametro'}"
 						th:text="'Volver'"></a>
 				</h4>

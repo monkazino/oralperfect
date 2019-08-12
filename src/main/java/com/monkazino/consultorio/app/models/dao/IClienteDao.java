@@ -7,6 +7,5 @@ import com.monkazino.consultorio.app.models.entity.Cliente;
 
 public interface IClienteDao extends PagingAndSortingRepository<Cliente, Long> {
 
-	@Query("select c from Cliente c left join fetch c.facturas f where c.id=?1")
-	public Cliente fetchByIdWithFacturas(Long id);
+	
 }
