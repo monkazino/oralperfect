@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="layout/layout :: head"></head>
+<body>
+
+	<header th:replace="layout/layout :: header"></header>
+
+	<div class="container py-4">
+		<div class="card bg-light">
+			<div class="card-header" th:text="${titulo}"></div>
+			<div class="card-body">
+				
+				<h4 class="card-title">
+					<a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-primary btn-xs"
+						th:href="@{'/parametro/formParametro/tipoParametro/' + ${tipoParametroEntity.tipoParametro}}"
+						th:text="'Crear Parametro'"></a>
+					<a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-primary btn-xs"
+						th:href="@{'/tipoParametro/listarTipoParametro'}"
+						th:text="'Volver'"></a>
+				</h4>
+
+				<ul class="list-group">
+					<li class="list-group-item active" th:text="${tipoParametroEntity.codigo}"></li>
+					<li class="list-group-item" th:text="${tipoParametroEntity.descripcion}"></li>
+					<li class="list-group-item" th:text="${tipoParametroEntity.observacion}"></li>
+					<li class="list-group-item" th:text="${tipoParametroEntity.fechaCreacion}"></li>
+					<li class="list-group-item" th:text="${tipoParametroEntity.estado}"></li>
+				</ul>
+				
+				<div th:if="${#lists.isEmpty(tipoParametroEntity.parametros)}"
+					class="alert alert-info my-4"
+					th:text="'No hay parametros asociados'"></div>
+
+				<table th:if="${not #lists.isEmpty(tipoParametroEntity.parametros)}"
+					class="table table-bordered table-striped my-4">
+					<thead class="thead-inverse">
+						<tr>
+							<th>Id</th>
+							<th>Código</th>
+							<th>Descripción</th>
+							<th>Observación</th>
+							<th>Fecha Creación</th>
+							<th>Estado</th>
+							<th sec:authorize="hasRole('ROLE_ADMIN')">Editar</th>
+							<th sec:authorize="hasRole('ROLE_ADMIN')">Eliminar</th-->
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="parametroEntity: ${tipoParametroEntity.parametros}">
+							<td th:text="${parametroEntity.parametro}"></td>
+							<td th:text="${parametroEntity.codigo}"></td>
+							<td th:text="${parametroEntity.descripcion}"></td>
+							<td th:text="${parametroEntity.observacion}"></td>
+							<td th:text="${parametroEntity.fechaCreacion}"></td>
+							<td th:text="${parametroEntity.estado}"></td>
+							<td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-primary btn-xs"
+								th:href="@{'/parametro/formParametro/parametro/' + ${parametroEntity.parametro}}" th:text="'Editar'"></a></td>
+							<td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-danger btn-xs"
+								th:href="@{/eliminarParametro/} + ${parametroEntity.parametro}" th:text="'Eliminar'"
+								onclick="return confirm('Estas seguro que quieres eliminar?');"></a></td>
+						</tr>
+					</tbody>
+
+				</table>
+
+			</div>
+		</div>
+
+	</div>
+
+	<footer th:replace="layout/layout :: footer"></footer>
+</body>
+</html>
