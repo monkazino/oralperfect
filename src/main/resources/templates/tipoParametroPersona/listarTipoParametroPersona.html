@@ -8,11 +8,11 @@
 	<div class="container py-4">
 
 		<div class="card bg-light">
-			<div class="card-header" th:text="${titulo}"></div>
+			<div class="card-header" th:text="${lblTituloListadoTipoParametroPersona}"></div>
 			<div class="card-body">
 
 				<h4 class="card-title">
-					<a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/tipoParametro/formTipoParametro}" class="btn btn-primary btn-xs">Crear</a>
+					<a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/tipoParametroPersona/formTipoParametroPersona}" class="btn btn-primary btn-xs">Crear</a>
 				</h4>
 				<table class="table table-striped table-bordered">
 					<thead class="thead-inverse">
@@ -28,18 +28,18 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr th:each="tipoParametroEntity: ${tipoParametros}">
+						<tr th:each="tipoParametroPersonaEntity: ${tipoParametrosPersona}">
 							<td sec:authorize="hasRole('ROLE_USER')"><a class="btn btn-primary btn-xs" 
-							th:href="@{/tipoParametro/verTipoParametro/} + ${tipoParametroEntity.tipoParametro}" th:text="${tipoParametroEntity.tipoParametro}"></a></td>
-							<td th:text="${tipoParametroEntity.codigo}"></td>
-							<td th:text="${tipoParametroEntity.descripcion}"></td>
-							<td th:text="${tipoParametroEntity.observacion}"></td>
-							<td th:text="${tipoParametroEntity.fechaCreacion}"></td>
-							<td th:text="${tipoParametroEntity.estado}"></td>
+							th:href="@{/tipoParametroPersona/verTipoParametroPersona/} + ${tipoParametroPersonaEntity.tipoParametro}" th:text="${tipoParametroPersonaEntity.tipoParametro}"></a></td>
+							<td th:text="${tipoParametroPersonaEntity.codigo}"></td>
+							<td th:text="${tipoParametroPersonaEntity.descripcion}"></td>
+							<td th:text="${tipoParametroPersonaEntity.observacion}"></td>
+							<td th:text="${tipoParametroPersonaEntity.fechaCreacion}"></td>
+							<td th:text="${tipoParametroPersonaEntity.estado}"></td>
 							<td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-primary btn-xs"
-								th:href="@{/tipoParametro/formTipoParametro/} + ${tipoParametroEntity.tipoParametro}" th:text="'Editar'"></a></td>
+								th:href="@{/tipoParametroPersona/formTipoParametroPersona/} + ${tipoParametroPersonaEntity.tipoParametro}" th:text="'Editar'"></a></td>
 							<td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-danger btn-xs"
-								th:href="@{/eliminarTipoParametro/} + ${tipoParametroEntity.tipoParametro}" th:text="'Eliminar'"
+								th:href="@{/eliminarTipoParametroPersona/} + ${tipoParametroPersonaEntity.tipoParametro}" th:text="'Eliminar'"
 								onclick="return confirm('Estas seguro que quieres eliminar?');"></a></td>
 						</tr>
 					</tbody>

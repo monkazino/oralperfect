@@ -1,6 +1,7 @@
 package com.monkazino.consultorio.app.controllers;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,41 +33,27 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.monkazino.consultorio.app.models.entity.ParametroEntity;
-import com.monkazino.consultorio.app.models.entity.TipoParametroEntity;
-import com.monkazino.consultorio.app.models.service.IParametroService;
-import com.monkazino.consultorio.app.models.service.ITipoParametroService;
+import com.monkazino.consultorio.app.models.entity.ParametroPersonaEntity;
+import com.monkazino.consultorio.app.models.entity.TipoParametroPersonaEntity;
+import com.monkazino.consultorio.app.models.service.IParametroPersonaService;
+import com.monkazino.consultorio.app.models.service.ITipoParametroPersonaService;
+import com.monkazino.consultorio.app.util.general.EstadoParametroEnum;
 import com.monkazino.consultorio.app.util.paginator.PageRender;
 
 @Controller
-@SessionAttributes("parametroEntity")
-public class ParametroController {
+@SessionAttributes("parametroPersonaEntity")
+public class ParametroPersonaController {
 	
 	protected final Log logger = LogFactory.getLog(this.getClass());
 
 	@Autowired
-	private IParametroService parametroService;
+	private IParametroPersonaService parametroPersonaService;
 
 	@Autowired
-	private ITipoParametroService tipoParametroService;
+	private ITipoParametroPersonaService tipoParametroPersonaService;
 
-	@PreAuthorize("hasRole('ROLE_USER')")
-	@GetMapping(value = "/parametro/verParametro/{id}")
-	public String verParametro(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
-
-		ParametroEntity parametroEntity = parametroService.findOne(id);
-		if (parametroEntity == null) {
-			flash.addFlashAttribute("error", "El parametro no existe en la base de datos");
-			return "redirect:/parametro/listarParametro";
-		}
-
-		model.put("parametroEntity", parametroEntity);
-		model.put("titulo", "Detalle parametro: " + parametroEntity.getDescripcion());
-		return "parametro/verParametro";
-	}
-
-	@RequestMapping(value = {"/parametro/listarParametro"}, method = RequestMethod.GET)
-	public String listarParametro(@RequestParam(name = "page", defaultValue = "0") int page, Model model,
+	@RequestMapping(value = {"/tipoParametroPersona/listarParametroPersona"}, method = RequestMethod.GET)
+	public String listarParametroPersona(@RequestParam(name = "page", defaultValue = "0") int page, Model model,
 			Authentication authentication,
 			HttpServletRequest request) {
 
@@ -102,84 +89,88 @@ public class ParametroController {
 		
 		Pageable pageRequest = PageRequest.of(page, 4);
 
-		Page<ParametroEntity> parametros = parametroService.findAll(pageRequest);
+		Page<ParametroPersonaEntity> parametrosPersona = parametroPersonaService.findAll(pageRequest);
 
-		PageRender<ParametroEntity> pageRender = new PageRender<ParametroEntity>("/parametro/listarParametro", parametros);
-		model.addAttribute("titulo", "Listado de parametros");
-		model.addAttribute("parametros", parametros);
+		PageRender<ParametroPersonaEntity> pageRender = new PageRender<ParametroPersonaEntity>("/tipoParametroPersona/listarParametroPersona", parametrosPersona);
+		model.addAttribute("titulo", "Listado de parametrosPersona");
+		model.addAttribute("parametrosPersona", parametrosPersona);
 		model.addAttribute("page", pageRender);
-		return "parametro/listarParametro";
+		return "tipoParametroPersona/listarParametroPersona";
 	}
 	
-	@GetMapping("/parametro/formParametro/tipoParametro/{tipoParametro}")
+	@GetMapping("/tipoParametroPersona/formParametroPersona/tipoParametroPersona/{tipoParametro}")
 	public String crear(@PathVariable(value = "tipoParametro") Long tipoParametro, Map<String, Object> model,
 			RedirectAttributes flash) {
 
-		TipoParametroEntity tipoParametroEntity = tipoParametroService.findOne(tipoParametro);
+		TipoParametroPersonaEntity tipoParametroPersonaEntity = tipoParametroPersonaService.findOne(tipoParametro);
 
-		if (tipoParametroEntity == null) {
+		if (tipoParametroPersonaEntity == null) {
 			flash.addFlashAttribute("error", "El tipo parametro no existe en la base de datos");
-			return "redirect:/tipoParametro/listarTipoParametro";
+			return "redirect:/tipoParametroPersona/listarTipoParametroPersona";
 		}
 
-		ParametroEntity parametroEntity= new ParametroEntity();
-		parametroEntity.setTipoParametroEntity(tipoParametroEntity);
-
-		model.put("parametroEntity", parametroEntity);
-		model.put("titulo", "Crear Parametro");
-
-		return "parametro/formParametro";
+		ParametroPersonaEntity parametroPersonaEntity= new ParametroPersonaEntity();
+		parametroPersonaEntity.setTipoParametroPersonaEntity(tipoParametroPersonaEntity);
+		parametroPersonaEntity.setFechaCreacion(new Date());
+		parametroPersonaEntity.setEstado(EstadoParametroEnum.ACTIVO.getCodigo());
+		
+		model.put("parametroPersonaEntity", parametroPersonaEntity);
+		model.put("lblTituloFormParametroPersona", "Parametro Persona");
+		model.put("lblBotonGuardar", "Guardar");
+		return "tipoParametroPersona/formParametroPersona";
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping(value = "/parametro/formParametro/parametro/{id}")
+	@RequestMapping(value = "/tipoParametroPersona/formParametroPersona/parametroPersona/{id}")
 	public String editarParametro(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
 
-		ParametroEntity parametroEntity = null;
+		ParametroPersonaEntity parametroPersonaEntity = null;
 
 		if (id > 0) {
-			parametroEntity = parametroService.findOne(id);
-			if (parametroEntity == null) {
+			parametroPersonaEntity = parametroPersonaService.findOne(id);
+			if (parametroPersonaEntity == null) {
 				flash.addFlashAttribute("error", "El ID del parametro no existe en la BBDD!");
-				return "redirectparametro/listarParametro";
+				return "redirect:/tipoParametroPersona/listarParametroPersona";
 			}
 		} else {
 			flash.addFlashAttribute("error", "El ID del parametro no puede ser cero!");
-			return "redirect:/parametro/listarParametro";
+			return "redirect:/tipoParametroPersona/listarParametroPersona";
 		}
-		model.put("parametroEntity", parametroEntity);
-		model.put("titulo", "Editar Parametro");
-		return "parametro/formParametro";
+		model.put("parametroPersonaEntity", parametroPersonaEntity);
+		model.put("lblTituloFormParametroPersona", "Parametro Persona");
+		model.put("lblBotonGuardar", "Guardar");
+		return "tipoParametroPersona/formParametroPersona";
 	}
 
 	@Secured("ROLE_ADMIN")
-	@RequestMapping(value = "/parametro/formParametro", method = RequestMethod.POST)
-	public String guardarParametro(@Valid ParametroEntity parametroEntity, BindingResult result, Model model,
+	@RequestMapping(value = "/tipoParametroPersona/formParametroPersona", method = RequestMethod.POST)
+	public String guardarParametro(@Valid ParametroPersonaEntity parametroPersonaEntity, BindingResult result, Model model,
 			RedirectAttributes flash, SessionStatus status) {
 
 		if (result.hasErrors()) {
 			model.addAttribute("titulo", "Formulario de Parametro");
-			return "parametro/formParametro";
+			model.addAttribute("lblBotonGuardar", "Guardar");
+			return "tipoParametroPersona/formParametroPersona";
 		}
 
-		String mensajeFlash = (parametroEntity.getParametro() != null) ? "Parametro editado con éxito!" : "Parametro creado con éxito!";
+		String mensajeFlash = (parametroPersonaEntity.getParametro() != null) ? "Parametro editado con éxito!" : "Parametro creado con éxito!";
 
-		parametroService.save(parametroEntity);
+		parametroPersonaService.save(parametroPersonaEntity);
 		status.setComplete();
 		flash.addFlashAttribute("success", mensajeFlash);
-		return "redirect:/tipoParametro/verTipoParametro/" + parametroEntity.getTipoParametroEntity().getTipoParametro();
+		return "redirect:/tipoParametroPersona/verTipoParametroPersona/" + parametroPersonaEntity.getTipoParametroPersonaEntity().getTipoParametro();
 	}
 
 	@Secured("ROLE_ADMIN")
-	@RequestMapping(value = "/eliminarParametro/{id}")
+	@RequestMapping(value = "/eliminarParametroPersona/{id}")
 	public String eliminarParametro(@PathVariable(value = "id") Long id, RedirectAttributes flash) {
 
 		if (id > 0) {
 			
-			parametroService.delete(id);
+			parametroPersonaService.delete(id);
 			flash.addFlashAttribute("success", "Parametro eliminado con éxito!");
 		}
-		return "redirect:/tipoParametro/listarTipoParametro";
+		return "redirect:/tipoParametroPersona/listarTipoParametroPersona";
 	}
 	
 	private boolean hasRole(String role) {

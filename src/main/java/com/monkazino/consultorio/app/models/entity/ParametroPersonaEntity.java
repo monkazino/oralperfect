@@ -19,8 +19,8 @@ import javax.validation.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-@Table(name = "TB_PARAM_PARAMETRO")
-public class ParametroEntity implements Serializable {
+@Table(name = "TB_PERS_PARAM_PARAMETRO")
+public class ParametroPersonaEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -29,15 +29,19 @@ public class ParametroEntity implements Serializable {
 	@Column (name = "PARAMETRO")
 	private Long parametro;
 
-	@NotNull
-	@NotEmpty
-	@Column (name = "DESCRIPCION")
-	private String descripcion;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="TIPO_PARAMETRO")
+	private TipoParametroPersonaEntity tipoParametroPersonaEntity;
 	
 	@NotNull
 	@NotEmpty
 	@Column (name = "CODIGO")
 	private String codigo;
+	
+	@NotNull
+	@NotEmpty
+	@Column (name = "DESCRIPCION")
+	private String descripcion;
 	
 	@NotEmpty
 	@Column (name = "OBSERVACION")
@@ -54,11 +58,7 @@ public class ParametroEntity implements Serializable {
 	@Column (name = "ESTADO")
 	private String estado;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="TIPO_PARAMETRO")
-	private TipoParametroEntity tipoParametroEntity;
-	
-	public ParametroEntity() {
+	public ParametroPersonaEntity() {
 		
 	}
 
@@ -68,6 +68,14 @@ public class ParametroEntity implements Serializable {
 
 	public void setParametro(Long parametro) {
 		this.parametro = parametro;
+	}
+	
+	public TipoParametroPersonaEntity getTipoParametroPersonaEntity() {
+		return tipoParametroPersonaEntity;
+	}
+
+	public void setTipoParametroPersonaEntity(TipoParametroPersonaEntity tipoParametroPersonaEntity) {
+		this.tipoParametroPersonaEntity = tipoParametroPersonaEntity;
 	}
 	
 	public String getCodigo() {
@@ -108,14 +116,6 @@ public class ParametroEntity implements Serializable {
 
 	public void setEstado(String estado) {
 		this.estado = estado;
-	}
-	
-	public TipoParametroEntity getTipoParametroEntity() {
-		return tipoParametroEntity;
-	}
-
-	public void setTipoParametroEntity(TipoParametroEntity tipoParametroEntity) {
-		this.tipoParametroEntity = tipoParametroEntity;
 	}
 	
 }

@@ -24,10 +24,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception {
 
 		http.authorizeRequests().antMatchers("/", "/css/**", "/js/**", "/images/**").permitAll()
-		/*.antMatchers("/ver/**").hasAnyRole("USER")*/
-		/*.antMatchers("/uploads/**").hasAnyRole("USER")*/
-		/*.antMatchers("/form/**").hasAnyRole("ADMIN")*/
-		/*.antMatchers("/eliminar/**").hasAnyRole("ADMIN")*/
 		.anyRequest().authenticated()
 		.and()
 		    .formLogin()
@@ -44,11 +40,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 	@Autowired
 	public void configurerGlobal(AuthenticationManagerBuilder build) throws Exception
 	{
-		/*
-		 * Deprecated
-		 * UserBuilder users = User.withDefaultPasswordEncoder();
-		 * */
-		
 		PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 		UserBuilder users = User.builder().passwordEncoder(encoder::encode);
 		
