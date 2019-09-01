@@ -21,8 +21,8 @@ import javax.validation.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-@Table(name = "TB_PARAM_TIPO_PARAMETRO")
-public class TipoParametroEntity implements Serializable {
+@Table(name = "TB_PERS_PARAM_TIPO_PARAMETRO")
+public class TipoParametroPersonaEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -56,11 +56,11 @@ public class TipoParametroEntity implements Serializable {
 	@Column (name = "ESTADO")
 	private String estado;
 	
-	@OneToMany(mappedBy = "tipoParametroEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<ParametroEntity> parametros;
+	@OneToMany(mappedBy = "tipoParametroPersonaEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<ParametroPersonaEntity> parametrosPersona;
 		
-	public TipoParametroEntity() {
-		parametros = new ArrayList<ParametroEntity>();
+	public TipoParametroPersonaEntity() {
+		parametrosPersona = new ArrayList<ParametroPersonaEntity>();
 	}
 
 	public Long getTipoParametro() {
@@ -111,16 +111,16 @@ public class TipoParametroEntity implements Serializable {
 		this.estado = estado;
 	}
 
-	public List<ParametroEntity> getParametros() {
-		return parametros;
+	public List<ParametroPersonaEntity> getParametrosPersona() {
+		return parametrosPersona;
 	}
 
-	public void setParametros(List<ParametroEntity> parametros) {
-		this.parametros = parametros;
+	public void setParametrosPersona(List<ParametroPersonaEntity> parametrosPersona) {
+		this.parametrosPersona = parametrosPersona;
 	}
 	
-	public void addParametro(ParametroEntity parametroEntity) {
-		parametros.add(parametroEntity);
+	public void addParametro(ParametroPersonaEntity parametroPersonaEntity) {
+		parametrosPersona.add(parametroPersonaEntity);
 	}
 	
 }

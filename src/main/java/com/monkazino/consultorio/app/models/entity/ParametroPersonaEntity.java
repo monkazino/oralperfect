@@ -11,6 +11,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
+import javax.persistence.SqlResultSetMapping;
+import javax.persistence.SqlResultSetMappings;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -19,8 +23,8 @@ import javax.validation.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-@Table(name = "TB_PARAM_PARAMETRO")
-public class ParametroEntity implements Serializable {
+@Table(name = "TB_PERS_PARAM_PARAMETRO")
+public class ParametroPersonaEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -56,9 +60,9 @@ public class ParametroEntity implements Serializable {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="TIPO_PARAMETRO")
-	private TipoParametroEntity tipoParametroEntity;
+	private TipoParametroPersonaEntity tipoParametroPersonaEntity;
 	
-	public ParametroEntity() {
+	public ParametroPersonaEntity() {
 		
 	}
 
@@ -110,12 +114,12 @@ public class ParametroEntity implements Serializable {
 		this.estado = estado;
 	}
 	
-	public TipoParametroEntity getTipoParametroEntity() {
-		return tipoParametroEntity;
+	public TipoParametroPersonaEntity getTipoParametroPersonaEntity() {
+		return tipoParametroPersonaEntity;
 	}
 
-	public void setTipoParametroEntity(TipoParametroEntity tipoParametroEntity) {
-		this.tipoParametroEntity = tipoParametroEntity;
+	public void setTipoParametroPersonaEntity(TipoParametroPersonaEntity tipoParametroPersonaEntity) {
+		this.tipoParametroPersonaEntity = tipoParametroPersonaEntity;
 	}
 	
 }
