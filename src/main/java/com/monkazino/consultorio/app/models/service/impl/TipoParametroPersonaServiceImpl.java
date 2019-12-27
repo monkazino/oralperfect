@@ -21,6 +21,10 @@ public class TipoParametroPersonaServiceImpl implements ITipoParametroPersonaSer
 	@Override
 	@Transactional(readOnly = true)
 	public List<TipoParametroPersonaEntity> findAll() {
+<<<<<<< HEAD
+=======
+		// TODO Auto-generated method stub
+>>>>>>> branch 'master' of https://github.com/monkazino/oralperfect.git
 		return (List<TipoParametroPersonaEntity>) tipoParametroPersonaDao.findAll();
 	}
 

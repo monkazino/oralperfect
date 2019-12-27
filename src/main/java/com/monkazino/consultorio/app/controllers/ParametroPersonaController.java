@@ -37,6 +37,7 @@ import com.monkazino.consultorio.app.models.entity.ParametroPersonaEntity;
 import com.monkazino.consultorio.app.models.entity.TipoParametroPersonaEntity;
 import com.monkazino.consultorio.app.models.service.IParametroPersonaService;
 import com.monkazino.consultorio.app.models.service.ITipoParametroPersonaService;
+<<<<<<< HEAD
 import com.monkazino.consultorio.app.util.general.EstadoParametroEnum;
 import com.monkazino.consultorio.app.util.paginator.PageRender;
 
@@ -138,6 +139,110 @@ public class ParametroPersonaController {
 		}
 		model.put("parametroPersonaEntity", parametroPersonaEntity);
 		model.put("lblTituloFormParametroPersona", "Parametro Persona");
+=======
+import com.monkazino.consultorio.app.util.general.EstadoPacienteEnum;
+import com.monkazino.consultorio.app.util.general.EstadoParametroEnum;
+import com.monkazino.consultorio.app.util.paginator.PageRender;
+
+@Controller
+@SessionAttributes("parametroPersonaEntity")
+public class ParametroPersonaController {
+	
+	protected final Log logger = LogFactory.getLog(this.getClass());
+
+	@Autowired
+	private IParametroPersonaService parametroPersonaService;
+
+	@Autowired
+	private ITipoParametroPersonaService tipoParametroPersonaService;
+
+	@RequestMapping(value = {"/parametroPersona/listarParametroPersona"}, method = RequestMethod.GET)
+	public String listarParametroPersona(@RequestParam(name = "page", defaultValue = "0") int page, Model model,
+			Authentication authentication,
+			HttpServletRequest request) {
+
+		if(authentication != null) {
+			logger.info("Hola usuario autenticado, tu username es: ".concat(authentication.getName()));
+		}
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+		if(auth != null) {
+			logger.info("Utilizando forma estática SecurityContextHolder.getContext().getAuthentication(): Usuario autenticado: ".concat(auth.getName()));
+		}
+		
+		if(hasRole("ROLE_ADMIN")) {
+			logger.info("Hola ".concat(auth.getName()).concat(" tienes acceso!"));
+		} else {
+			logger.info("Hola ".concat(auth.getName()).concat(" NO tienes acceso!"));
+		}
+		
+		SecurityContextHolderAwareRequestWrapper securityContext = new SecurityContextHolderAwareRequestWrapper(request, "");
+		
+		if(securityContext.isUserInRole("ROLE_ADMIN")) {
+			logger.info("Forma usando SecurityContextHolderAwareRequestWrapper: Hola ".concat(auth.getName()).concat(" tienes acceso!"));
+		} else {
+			logger.info("Forma usando SecurityContextHolderAwareRequestWrapper: Hola ".concat(auth.getName()).concat(" NO tienes acceso!"));
+		}
+
+		if(request.isUserInRole("ROLE_ADMIN")) {
+			logger.info("Forma usando HttpServletRequest: Hola ".concat(auth.getName()).concat(" tienes acceso!"));
+		} else {
+			logger.info("Forma usando HttpServletRequest: Hola ".concat(auth.getName()).concat(" NO tienes acceso!"));
+		}	
+		
+		Pageable pageRequest = PageRequest.of(page, 4);
+
+		Page<ParametroPersonaEntity> parametrosPersona = parametroPersonaService.findAll(pageRequest);
+
+		PageRender<ParametroPersonaEntity> pageRender = new PageRender<ParametroPersonaEntity>("/parametroPersona/listarParametroPersona", parametrosPersona);
+		model.addAttribute("titulo", "Listado de parametrosPersona");
+		model.addAttribute("parametrosPersona", parametrosPersona);
+		model.addAttribute("page", pageRender);
+		return "parametroPersona/listarParametroPersona";
+	}
+	
+	@GetMapping("/tipoParametroPersona/formParametroPersona/tipoParametroPersona/{tipoParametro}")
+	public String crear(@PathVariable(value = "tipoParametro") Long tipoParametro, Map<String, Object> model,
+			RedirectAttributes flash) {
+
+		TipoParametroPersonaEntity tipoParametroPersonaEntity = tipoParametroPersonaService.findOne(tipoParametro);
+
+		if (tipoParametroPersonaEntity == null) {
+			flash.addFlashAttribute("error", "El tipo parametro no existe en la base de datos");
+			return "redirect:/tipoParametroPersona/listarTipoParametroPersona";
+		}
+
+		ParametroPersonaEntity parametroPersonaEntity= new ParametroPersonaEntity();
+		parametroPersonaEntity.setTipoParametroPersonaEntity(tipoParametroPersonaEntity);
+		parametroPersonaEntity.setFechaCreacion(new Date());
+		parametroPersonaEntity.setEstado(EstadoParametroEnum.ACTIVO.getCodigo());
+		
+		model.put("parametroPersonaEntity", parametroPersonaEntity);
+		model.put("lblTituloFormularioParametroPersona", "Parametro Persona");
+		model.put("lblBotonGuardar", "Guardar");
+		return "tipoParametroPersona/formParametroPersona";
+	}
+
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@RequestMapping(value = "/tipoParametroPersona/formParametroPersona/parametroPersona/{id}")
+	public String editarParametro(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
+
+		ParametroPersonaEntity parametroPersonaEntity = null;
+
+		if (id > 0) {
+			parametroPersonaEntity = parametroPersonaService.findOne(id);
+			if (parametroPersonaEntity == null) {
+				flash.addFlashAttribute("error", "El ID del parametro no existe en la BBDD!");
+				return "redirectparametroPersona/listarParametroPersona";
+			}
+		} else {
+			flash.addFlashAttribute("error", "El ID del parametro no puede ser cero!");
+			return "redirect:/parametroPersona/listarParametroPersona";
+		}
+		model.put("parametroPersonaEntity", parametroPersonaEntity);
+		model.put("lblTituloFormularioParametroPersona", "Parametro Persona");
+>>>>>>> branch 'master' of https://github.com/monkazino/oralperfect.git
 		model.put("lblBotonGuardar", "Guardar");
 		return "tipoParametroPersona/formParametroPersona";
 	}

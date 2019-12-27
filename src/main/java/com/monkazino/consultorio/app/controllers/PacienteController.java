@@ -162,7 +162,7 @@ public class PacienteController {
 		model.put("listaParamNivelAcademico", listaParamNivelAcademico);
 		model.put("listaParamRaza", listaParamRaza);
 		model.put("listaParamOcupacion", listaParamOcupacion);
-		model.put("lblTituloFormPaciente", "Paciente");
+		model.put("lblTituloFormularioPaciente", "Paciente");
 		model.put("lblBotonGuardar", "Guardar");
 		return "paciente/formPaciente";
 	}
@@ -191,7 +191,7 @@ public class PacienteController {
 		model.put("listaParamNivelAcademico", listaParamNivelAcademico);
 		model.put("listaParamRaza", listaParamRaza);
 		model.put("listaParamOcupacion", listaParamOcupacion);
-		model.put("lblTituloFormPaciente", "Paciente");
+		model.put("lblTituloFormularioPaciente", "Paciente");
 		model.put("lblBotonGuardar", "Guardar");
 		return "paciente/formPaciente";
 	}
@@ -223,7 +223,7 @@ public class PacienteController {
 			RedirectAttributes flash, SessionStatus status) {
 
 		if (result.hasErrors()) {
-			model.addAttribute("lblTituloFormPaciente", "Paciente");
+			model.addAttribute("lblTituloFormularioPaciente", "Paciente");
 			model.addAttribute("listaParamTipoIdentificacion", listaParamTipoIdentificacion);
 			model.addAttribute("listaParamGenero", listaParamGenero);
 			model.addAttribute("listaParamEstadoCivil", listaParamEstadoCivil);

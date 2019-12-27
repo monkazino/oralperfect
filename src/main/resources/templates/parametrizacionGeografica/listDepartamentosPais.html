@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="layout/layout :: head"></head>
+<body>
+
+	<header th:replace="layout/layout :: header"></header>
+
+	<div class="container py-4">
+		<div class="card bg-light">
+			<div class="card-header" th:text="${lblTituloDetallePais}"></div>
+			<div class="card-body">
+				
+				<h4 class="card-title">
+					<a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-primary btn-xs" th:href="@{'/parametrizacionGeografica/formDepartamento/pais/' + ${paisEntity.pais}}" th:text="'Crear Departamento'"></a>
+					<a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-primary btn-xs" th:href="@{'/parametrizacionGeografica/listPais'}" th:text="'Volver'"></a>
+				</h4>
+
+				<div th:if="${#lists.isEmpty(paisEntity.departamentos)}"
+					class="alert alert-info my-4"
+					th:text="'No hay departamentos'"></div>
+
+				<table th:if="${not #lists.isEmpty(paisEntity.departamentos)}"
+					class="table table-bordered table-striped my-4">
+					<thead class="thead-inverse">
+						<tr>
+							<th>Id</th>
+							<th>Código</th>
+							<th>Descripción</th>
+							<th sec:authorize="hasRole('ROLE_ADMIN')">Editar</th>
+							<th sec:authorize="hasRole('ROLE_ADMIN')">Eliminar</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="departamentoEntity: ${paisEntity.departamentos}">
+							<td sec:authorize="hasRole('ROLE_USER')">
+								<a class="btn btn-primary btn-xs" th:href="@{/parametrizacionGeografica/listCiudadesDepartamento/} + ${departamentoEntity.paisEntity.pais}" th:text="${departamentoEntity.departamento}"></a>
+							</td>
+							<td th:text="${departamentoEntity.codigo}"></td>
+							<td th:text="${departamentoEntity.descripcion}"></td>
+							<td sec:authorize="hasRole('ROLE_ADMIN')">
+								<a class="btn btn-primary btn-xs" th:href="@{'/parametrizacionGeografica/formDepartamento/departamento/' + ${departamentoEntity.departamento}}" th:text="'Editar'"></a>
+							</td>
+							<td sec:authorize="hasRole('ROLE_ADMIN')">
+								<a class="btn btn-danger btn-xs" th:href="@{/eliminarDepartamento/} + ${departamentoEntity.departamento}" th:text="'Eliminar'" onclick="return confirm('¿Desea eliminar registro?');"></a>
+							</td>
+						</tr>
+					</tbody>
+
+				</table>
+
+			</div>
+		</div>
+
+	</div>
+
+	<footer th:replace="layout/layout :: footer"></footer>
+</body>
+</html>
