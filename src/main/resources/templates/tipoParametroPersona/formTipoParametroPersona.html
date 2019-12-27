@@ -7,11 +7,8 @@
 
 	<div class="container py-4">
 		<div class="card bg-dark text-white">
-<<<<<<< HEAD
 			<div class="card-header" th:text="${lblTituloFormTipoParametroPersona}"></div>
-=======
 			<div class="card-header" th:text="${lblTituloFormularioTipoParametroPersona}"></div>
->>>>>>> branch 'master' of https://github.com/monkazino/oralperfect.git
 			<div class="card-body">
 				<div th:object="${tipoParametroPersonaEntity}" th:remove="tag">
 					<ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">

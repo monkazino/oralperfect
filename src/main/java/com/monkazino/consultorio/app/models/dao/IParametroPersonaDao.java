@@ -7,10 +7,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
 import com.monkazino.consultorio.app.models.entity.ParametroPersonaEntity;
-<<<<<<< HEAD
-=======
-import com.monkazino.consultorio.app.util.general.ParametroPacienteEnum;
->>>>>>> branch 'master' of https://github.com/monkazino/oralperfect.git
 
 public interface IParametroPersonaDao extends PagingAndSortingRepository<ParametroPersonaEntity, Long> {
 	
