@@ -43,6 +43,11 @@ public class DepartamentoEntity implements Serializable {
 	@Column (name = "DESCRIPCION")
 	private String descripcion;
 	
+	@NotNull
+	@NotEmpty
+	@Column (name = "ESTADO")
+	private String estado;
+	
 	@OneToMany(mappedBy = "departamentoEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<CiudadEntity> ciudades;
 	
@@ -80,6 +85,14 @@ public class DepartamentoEntity implements Serializable {
 
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
+	}
+	
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
 	}
 	
 	public List<CiudadEntity> getCiudades() {

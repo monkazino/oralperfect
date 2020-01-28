@@ -15,12 +15,16 @@ public interface ILocalidadService {
 
 	public void save(LocalidadEntity localidadEntity);
 	
-	public LocalidadEntity findOne(Long id);
+	public LocalidadEntity findOne(Long localidad);
 	
-	public void delete(Long id);
+	public void delete(Long localidad);
 	
 	public List<LocalidadEntity> consultarLocalidadesCiudad(Long ciudad);
 	
-	public LocalidadEntity fetchByIdWithBarrios(Long id);
+	public LocalidadEntity fetchByIdWithBarrios(Long localidad);
+
+	public int consultarCountLocalidadByCodigoCiudad(String codigo, Long ciudad);
+	
+	public int consultarCountLocalidadByCodigoLocalidadCiudad(String codigo, Long localidad, Long ciudad);
 
 }

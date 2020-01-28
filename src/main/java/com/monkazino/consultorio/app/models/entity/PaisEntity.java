@@ -37,6 +37,11 @@ public class PaisEntity implements Serializable {
 	@Column (name = "DESCRIPCION")
 	private String descripcion;
 	
+	@NotNull
+	@NotEmpty
+	@Column (name = "ESTADO")
+	private String estado;
+	
 	@OneToMany(mappedBy = "paisEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<DepartamentoEntity> departamentos;
 		
@@ -66,6 +71,14 @@ public class PaisEntity implements Serializable {
 
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
+	}
+	
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
 	}
 
 	public List<DepartamentoEntity> getDepartamentos() {

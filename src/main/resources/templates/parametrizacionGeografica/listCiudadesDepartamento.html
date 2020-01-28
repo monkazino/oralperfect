@@ -33,7 +33,7 @@
 					<tbody>
 						<tr th:each="ciudadEntity: ${departamentoEntity.ciudades}">
 							<td sec:authorize="hasRole('ROLE_USER')">
-								<a class="btn btn-primary btn-xs" th:href="@{/parametrizacionGeografica/listLocalidadesCiudad/} + ${ciudadEntity.departamentoEntity.departamento}" th:text="${ciudadEntity.ciudad}"></a>
+								<a class="btn btn-primary btn-xs" th:href="@{/parametrizacionGeografica/listLocalidadesCiudad/} + ${ciudadEntity.ciudad}" th:text="${ciudadEntity.ciudad}"></a>
 							</td>
 							<td th:text="${ciudadEntity.codigo}"></td>
 							<td th:text="${ciudadEntity.descripcion}"></td>

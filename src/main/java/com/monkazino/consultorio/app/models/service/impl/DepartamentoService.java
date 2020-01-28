@@ -58,8 +58,20 @@ public class DepartamentoService implements IDepartamentoService {
 	
 	@Override
 	@Transactional(readOnly = true)
-	public DepartamentoEntity fetchByIdWithCiudades(Long id) {
-		return departamentoDao.fetchByIdWithCiudades(id);
+	public DepartamentoEntity fetchByIdWithCiudades(Long departamento) {
+		return departamentoDao.fetchByIdWithCiudades(departamento);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public int consultarCountDepartamentoByCodigoPais(String codigo, Long pais) {
+		return departamentoDao.consultarCountDepartamentoByCodigoPais(codigo, pais);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public int consultarCountDepartamentoByCodigoDepartamentoPais(String codigo, Long departamento, Long pais) {
+		return departamentoDao.consultarCountDepartamentoByCodigoDepartamentoPais(codigo, departamento, pais);
 	}
 
 }

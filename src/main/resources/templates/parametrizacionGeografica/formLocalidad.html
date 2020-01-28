@@ -8,6 +8,7 @@
 	<div class="container py-4">
 		<div class="card bg-dark text-white">
 			<div class="card-header" th:text="${lblTituloFormLocalidad}"></div>
+			<div class="alert alert-danger" th:if="${mensajeErrorLocalidad != null}" th:text="${mensajeErrorLocalidad}"></div>
 			<div class="card-body">
 				<div th:object="${localidadEntity}" th:remove="tag">
 					<ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
@@ -20,21 +21,21 @@
 					<div class="form-group row">
 						<label for="codigo" class="col-sm-2 col-form-label">Código</label>
 						<div class="col-sm-6">
-							<input type="text" th:field="*{codigo}" class="form-control"th:errorclass="'form-control alert-danger'" />
+							<input type="text" th:field="*{codigo}" class="form-control text-uppercase"th:errorclass="'form-control alert-danger'" />
 							<small class="form-text text-danger" th:if="${#fields.hasErrors('codigo')}" th:errors="*{codigo}"></small>
 						</div>
 					</div>					
 					<div class="form-group row">
 						<label for="descripcion" class="col-sm-2 col-form-label">Descripción</label>
 						<div class="col-sm-6">
-							<input type="text" th:field="*{descripcion}" class="form-control" th:errorclass="'form-control alert-danger'" />
+							<input type="text" th:field="*{descripcion}" class="form-control text-uppercase" th:errorclass="'form-control alert-danger'" />
 							<small class="form-text text-danger" th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></small>
 						</div>
 					</div>					
 					
 					<div class="form-group row">
 						<div class="col-sm-6">
-							<input type="submit" th:value="${lblBotonGuardar}" class="btn btn-secondary" />
+							<input class="btn btn-secondary" type="submit" th:value="Guardar"/>
 							<a class="btn btn-secondary btn-xs"	th:href="@{/parametrizacionGeografica/listLocalidadesCiudad/} + ${localidadEntity.ciudadEntity.ciudad}" th:text="Cancelar"></a>
 						</div>
 					</div>

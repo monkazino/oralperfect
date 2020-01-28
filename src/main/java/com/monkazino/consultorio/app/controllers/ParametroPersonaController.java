@@ -37,10 +37,7 @@ import com.monkazino.consultorio.app.models.entity.ParametroPersonaEntity;
 import com.monkazino.consultorio.app.models.entity.TipoParametroPersonaEntity;
 import com.monkazino.consultorio.app.models.service.IParametroPersonaService;
 import com.monkazino.consultorio.app.models.service.ITipoParametroPersonaService;
-import com.monkazino.consultorio.app.util.general.EstadoParametroEnum;
-import com.monkazino.consultorio.app.util.paginator.PageRender;
-import com.monkazino.consultorio.app.util.general.EstadoPacienteEnum;
-import com.monkazino.consultorio.app.util.general.EstadoParametroEnum;
+import com.monkazino.consultorio.app.util.general.EstadoActivoInactivoEnum;
 import com.monkazino.consultorio.app.util.paginator.PageRender;
 
 @Controller
@@ -55,6 +52,89 @@ public class ParametroPersonaController {
 	@Autowired
 	private ITipoParametroPersonaService tipoParametroPersonaService;
 
+	@GetMapping("/tipoParametroPersona/formParametroPersona/tipoParametroPersona/{tipoParametroPersona}")
+	public String crearParametroPersona(@PathVariable(value = "tipoParametroPersona") Long tipoParametroPersona, Map<String, Object> model, RedirectAttributes flash) {
+		TipoParametroPersonaEntity tipoParametroPersonaEntity = tipoParametroPersonaService.findOne(tipoParametroPersona);
+		if (tipoParametroPersonaEntity == null) {
+			flash.addFlashAttribute("error", "El tipo parametro persona no existe en la base de datos");
+			return "redirect:/tipoParametroPersona/listTipoParametroPersona";
+		}
+		ParametroPersonaEntity parametroPersonaEntity= new ParametroPersonaEntity();
+		parametroPersonaEntity.setTipoParametroPersonaEntity(tipoParametroPersonaEntity);
+		parametroPersonaEntity.setFechaCreacion(new Date());
+		parametroPersonaEntity.setEstado(EstadoActivoInactivoEnum.ACTIVO.getCodigo());
+		model.put("parametroPersonaEntity", parametroPersonaEntity);
+		model.put("lblTituloFormularioParametroPersona", "Parametro Persona");
+		return "tipoParametroPersona/formParametroPersona";
+	}
+
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@RequestMapping(value = "/tipoParametroPersona/formParametroPersona/parametroPersona/{parametroPersona}")
+	public String editarParametroPersona(@PathVariable(value = "parametroPersona") Long parametroPersona, Map<String, Object> model, RedirectAttributes flash) {
+		ParametroPersonaEntity parametroPersonaEntity = null;
+		if (parametroPersona > 0) {
+			parametroPersonaEntity = parametroPersonaService.findOne(parametroPersona);
+			if (parametroPersonaEntity == null) {
+				flash.addFlashAttribute("error", "El ID del parametro persona no existe en la BBDD!");
+				return "redirectparametroPersona/listarParametroPersona";
+			}
+		} else {
+			flash.addFlashAttribute("error", "El ID del parametro persona no puede ser cero!");
+			return "redirect:/parametroPersona/listarParametroPersona";
+		}
+		model.put("parametroPersonaEntity", parametroPersonaEntity);
+		model.put("lblTituloFormularioParametroPersona", "Parametro Persona");
+		return "tipoParametroPersona/formParametroPersona";
+	}
+
+	@Secured("ROLE_ADMIN")
+	@RequestMapping(value = "/tipoParametroPersona/formParametroPersona", method = RequestMethod.POST)
+	public String guardarParametroPersona(@Valid ParametroPersonaEntity parametroPersonaEntity, BindingResult result, Map<String, Object> model, RedirectAttributes flash, SessionStatus status) {
+		int countParametroPersonaCodigo = 0;
+		if (result.hasErrors()) {
+			return "/tipoParametroPersona/formParametroPersona";
+		}
+		if (parametroPersonaEntity.getParametroPersona() == null) {
+			countParametroPersonaCodigo = parametroPersonaService.consultarCountParametroPersonaByCodigoTipoParametroPersona(parametroPersonaEntity.getCodigo().toUpperCase(), parametroPersonaEntity.getTipoParametroPersonaEntity().getTipoParametroPersona());
+		} else {
+			countParametroPersonaCodigo = parametroPersonaService.consultarCountParametroPersonaByCodigoParametroPersonaTipoParametroPersona(parametroPersonaEntity.getCodigo().toUpperCase(), parametroPersonaEntity.getParametroPersona(), parametroPersonaEntity.getTipoParametroPersonaEntity().getTipoParametroPersona());
+		}
+		if (countParametroPersonaCodigo == 0) {
+			parametroPersonaEntity.setCodigo(parametroPersonaEntity.getCodigo().toUpperCase());
+			parametroPersonaEntity.setDescripcion(parametroPersonaEntity.getDescripcion().toUpperCase());
+			parametroPersonaService.save(parametroPersonaEntity);
+			status.setComplete();
+			flash.addFlashAttribute("success", "Registro almacenado correctamente");
+			return "redirect:/tipoParametroPersona/listParametroPersona/" + parametroPersonaEntity.getTipoParametroPersonaEntity().getTipoParametroPersona();
+		} else {
+			model.put("mensajeErrorParametroPersona", "El código ya se encuentra registrado");
+			return "tipoParametroPersona/formParametroPersona";
+		}
+	}
+
+	@Secured("ROLE_ADMIN")
+	@RequestMapping(value = "/eliminarParametroPersona/{parametroPersona}")
+	public String eliminarParametroPersona(@PathVariable(value = "parametroPersona") Long parametroPersona, RedirectAttributes flash) {
+		ParametroPersonaEntity parametroPersonaEntity = null;
+		Long tipoParametroPersona = 0L;
+		if (parametroPersona > 0) {
+			parametroPersonaEntity = parametroPersonaService.findOne(parametroPersona);
+			if (parametroPersonaEntity != null) {
+				tipoParametroPersona = parametroPersonaEntity.getTipoParametroPersonaEntity().getTipoParametroPersona();
+				
+				/*if (parametroPersonaEntity.getCiudades().isEmpty() || parametroPersonaEntity.getCiudades() == null) {
+					parametroPersonaService.delete(parametroPersona);
+					flash.addFlashAttribute("success", "Parametro persona eliminado con éxito");
+				} else {
+					flash.addFlashAttribute("success", "Parametro persona no se puede eliminar, tiene asociado ciudades");
+				}*/
+			} else {
+				flash.addFlashAttribute("error", "El ID del parametro persona no existe en la BBDD!");
+			} 
+		}
+		return "redirect:/tipoParametroPersona/listParametroPersona/" + tipoParametroPersona;
+	}
+	
 	@RequestMapping(value = {"/parametroPersona/listarParametroPersona"}, method = RequestMethod.GET)
 	public String listarParametroPersona(@RequestParam(name = "page", defaultValue = "0") int page, Model model,
 			Authentication authentication,
@@ -95,85 +175,10 @@ public class ParametroPersonaController {
 		Page<ParametroPersonaEntity> parametrosPersona = parametroPersonaService.findAll(pageRequest);
 
 		PageRender<ParametroPersonaEntity> pageRender = new PageRender<ParametroPersonaEntity>("/parametroPersona/listarParametroPersona", parametrosPersona);
-		model.addAttribute("titulo", "Listado de parametrosPersona");
+		model.addAttribute("titulo", "Listado de parametros persona");
 		model.addAttribute("parametrosPersona", parametrosPersona);
 		model.addAttribute("page", pageRender);
 		return "parametroPersona/listarParametroPersona";
-	}
-	
-	@GetMapping("/tipoParametroPersona/formParametroPersona/tipoParametroPersona/{tipoParametro}")
-	public String crear(@PathVariable(value = "tipoParametro") Long tipoParametro, Map<String, Object> model,
-			RedirectAttributes flash) {
-
-		TipoParametroPersonaEntity tipoParametroPersonaEntity = tipoParametroPersonaService.findOne(tipoParametro);
-
-		if (tipoParametroPersonaEntity == null) {
-			flash.addFlashAttribute("error", "El tipo parametro no existe en la base de datos");
-			return "redirect:/tipoParametroPersona/listarTipoParametroPersona";
-		}
-
-		ParametroPersonaEntity parametroPersonaEntity= new ParametroPersonaEntity();
-		parametroPersonaEntity.setTipoParametroPersonaEntity(tipoParametroPersonaEntity);
-		parametroPersonaEntity.setFechaCreacion(new Date());
-		parametroPersonaEntity.setEstado(EstadoParametroEnum.ACTIVO.getCodigo());
-		
-		model.put("parametroPersonaEntity", parametroPersonaEntity);
-		model.put("lblTituloFormularioParametroPersona", "Parametro Persona");
-		model.put("lblBotonGuardar", "Guardar");
-		return "tipoParametroPersona/formParametroPersona";
-	}
-
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping(value = "/tipoParametroPersona/formParametroPersona/parametroPersona/{id}")
-	public String editarParametro(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
-
-		ParametroPersonaEntity parametroPersonaEntity = null;
-
-		if (id > 0) {
-			parametroPersonaEntity = parametroPersonaService.findOne(id);
-			if (parametroPersonaEntity == null) {
-				flash.addFlashAttribute("error", "El ID del parametro no existe en la BBDD!");
-				return "redirectparametroPersona/listarParametroPersona";
-			}
-		} else {
-			flash.addFlashAttribute("error", "El ID del parametro no puede ser cero!");
-			return "redirect:/parametroPersona/listarParametroPersona";
-		}
-		model.put("parametroPersonaEntity", parametroPersonaEntity);
-		model.put("lblTituloFormularioParametroPersona", "Parametro Persona");
-		model.put("lblBotonGuardar", "Guardar");
-		return "tipoParametroPersona/formParametroPersona";
-	}
-
-	@Secured("ROLE_ADMIN")
-	@RequestMapping(value = "/tipoParametroPersona/formParametroPersona", method = RequestMethod.POST)
-	public String guardarParametro(@Valid ParametroPersonaEntity parametroPersonaEntity, BindingResult result, Model model,
-			RedirectAttributes flash, SessionStatus status) {
-
-		if (result.hasErrors()) {
-			model.addAttribute("titulo", "Formulario de Parametro");
-			model.addAttribute("lblBotonGuardar", "Guardar");
-			return "tipoParametroPersona/formParametroPersona";
-		}
-
-		String mensajeFlash = (parametroPersonaEntity.getParametro() != null) ? "Parametro editado con éxito!" : "Parametro creado con éxito!";
-
-		parametroPersonaService.save(parametroPersonaEntity);
-		status.setComplete();
-		flash.addFlashAttribute("success", mensajeFlash);
-		return "redirect:/tipoParametroPersona/verTipoParametroPersona/" + parametroPersonaEntity.getTipoParametroPersonaEntity().getTipoParametro();
-	}
-
-	@Secured("ROLE_ADMIN")
-	@RequestMapping(value = "/eliminarParametroPersona/{id}")
-	public String eliminarParametro(@PathVariable(value = "id") Long id, RedirectAttributes flash) {
-
-		if (id > 0) {
-			
-			parametroPersonaService.delete(id);
-			flash.addFlashAttribute("success", "Parametro eliminado con éxito!");
-		}
-		return "redirect:/tipoParametroPersona/listarTipoParametroPersona";
 	}
 	
 	private boolean hasRole(String role) {

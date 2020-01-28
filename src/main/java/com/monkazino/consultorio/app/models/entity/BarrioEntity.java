@@ -39,6 +39,11 @@ public class BarrioEntity implements Serializable {
 	@Column (name = "DESCRIPCION")
 	private String descripcion;
 	
+	@NotNull
+	@NotEmpty
+	@Column (name = "ESTADO")
+	private String estado;
+	
 	public BarrioEntity() {
 		
 	}
@@ -73,5 +78,13 @@ public class BarrioEntity implements Serializable {
 
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
+	}
+	
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
 	}
 }

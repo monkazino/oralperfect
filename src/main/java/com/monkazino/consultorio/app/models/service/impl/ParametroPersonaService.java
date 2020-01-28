@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.monkazino.consultorio.app.models.dao.IParametroPersonaDao;
 import com.monkazino.consultorio.app.models.entity.ParametroPersonaEntity;
 import com.monkazino.consultorio.app.models.service.IParametroPersonaService;
-import com.monkazino.consultorio.app.util.general.EstadoParametroEnum;
+import com.monkazino.consultorio.app.util.general.EstadoActivoInactivoEnum;
 
 @Service
 public class ParametroPersonaService implements IParametroPersonaService {
@@ -53,8 +53,20 @@ public class ParametroPersonaService implements IParametroPersonaService {
 	
 	@Override
 	@Transactional(readOnly = true)
-	public List<ParametroPersonaEntity> consultarParametrosPersonaTipoParametro(String codigoTipoParametro) {
-		return (List<ParametroPersonaEntity>) parametroPersonaDao.consultarParametrosPersonaTipoParametro(codigoTipoParametro, EstadoParametroEnum.ACTIVO.getCodigo());
+	public List<ParametroPersonaEntity> consultarParametrosPersonaTipoParametroPersona(String codigoTipoParametroPersona) {
+		return (List<ParametroPersonaEntity>) parametroPersonaDao.consultarParametrosPersonaTipoParametroPersona(codigoTipoParametroPersona, EstadoActivoInactivoEnum.ACTIVO.getCodigo());
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public int consultarCountParametroPersonaByCodigoTipoParametroPersona(String codigo, Long tipoParametroPersona) {
+		return parametroPersonaDao.consultarCountParametroPersonaByCodigoTipoParametroPersona(codigo, tipoParametroPersona);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public int consultarCountParametroPersonaByCodigoParametroPersonaTipoParametroPersona(String codigo, Long parametroPersona, Long tipoParametroPersona) {
+		return parametroPersonaDao.consultarCountParametroPersonaByCodigoParametroPersonaTipoParametroPersona(codigo, parametroPersona, tipoParametroPersona);
 	}
 
 }

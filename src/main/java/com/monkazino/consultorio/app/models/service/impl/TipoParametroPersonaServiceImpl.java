@@ -52,8 +52,20 @@ public class TipoParametroPersonaServiceImpl implements ITipoParametroPersonaSer
 	
 	@Override
 	@Transactional(readOnly = true)
-	public TipoParametroPersonaEntity fetchByIdWithParametrosPersona(Long id) {
-		return tipoParametroPersonaDao.fetchByIdWithParametrosPersona(id);
+	public TipoParametroPersonaEntity fetchByIdWithParametrosPersona(Long tipoParametroPersona) {
+		return tipoParametroPersonaDao.fetchByIdWithParametrosPersona(tipoParametroPersona);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public int consultarCountTipoParametroPersonaByCodigo(String codigo) {
+		return tipoParametroPersonaDao.consultarCountTipoParametroPersonaByCodigo(codigo);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public int consultarCountTipoParametroPersonaByCodigoTipoParametroPersona(String codigo, Long tipoParametroPersona) {
+		return tipoParametroPersonaDao.consultarCountTipoParametroPersonaByCodigoTipoParametroPersona(codigo, tipoParametroPersona);
 	}
 
 }

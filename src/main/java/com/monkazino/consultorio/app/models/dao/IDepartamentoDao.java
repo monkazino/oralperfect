@@ -11,11 +11,15 @@ import com.monkazino.consultorio.app.models.entity.DepartamentoEntity;
 public interface IDepartamentoDao extends PagingAndSortingRepository<DepartamentoEntity, Long> {
 	
 	@Query("select p from DepartamentoEntity p where p.paisEntity.pais = :pais")
-	public List<DepartamentoEntity> consultarDepartamentosPais(
-			@Param("pais") Long pais);
+	public List<DepartamentoEntity> consultarDepartamentosPais(@Param("pais") Long pais);
 	
-	@Query("select p from DepartamentoEntity p left join fetch p.ciudades d where p.id=?1")
-	public DepartamentoEntity fetchByIdWithCiudades(Long id);
+	@Query("select p from DepartamentoEntity p left join fetch p.ciudades d where p.id = :departamento")
+	public DepartamentoEntity fetchByIdWithCiudades(@Param("departamento") Long departamento);
 
+	@Query("select count(1) from DepartamentoEntity p where p.codigo = :codigo and p.paisEntity.pais = :pais")
+	public int consultarCountDepartamentoByCodigoPais(@Param("codigo") String codigo, @Param("pais") Long pais);
+
+	@Query("select count(1) from DepartamentoEntity p where p.codigo = :codigo and p.departamento <> :departamento and p.paisEntity.pais = :pais")
+	public int consultarCountDepartamentoByCodigoDepartamentoPais(@Param("codigo") String codigo, @Param("departamento") Long departamento, @Param("pais") Long pais);
 
 }

@@ -8,6 +8,7 @@
 	<div class="container py-4">
 		<div class="card bg-dark text-white">
 			<div class="card-header" th:text="${lblTituloFormPaciente}"></div>
+			<div class="alert alert-danger" th:if="${mensajeErrorPaciente != null}" th:text="${mensajeErrorPaciente}"></div>
 			<div class="card-body">
 				<div th:object="${pacienteEntity}" th:remove="tag">
 					<ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
@@ -20,7 +21,7 @@
 					<div class="form-group row">
 						<label for="numeroIdentificacion" class="col-sm-2 col-form-label">Número Identificación</label>
 						<div class="col-sm-6">
-							<input type="text" th:field="*{numeroIdentificacion}" class="form-control" th:errorclass="'form-control alert-danger'" />
+							<input type="text" th:field="*{numeroIdentificacion}" class="form-control text-uppercase" th:errorclass="'form-control alert-danger'" />
 							<small class="form-text text-danger" th:if="${#fields.hasErrors('numeroIdentificacion')}" th:errors="*{numeroIdentificacion}"></small>
 						</div>
 					</div>
@@ -29,35 +30,35 @@
 						<div class="col-sm-6">
 							 <select th:field="*{paramTipoIdentificacion}">
 	                         	<option value=""></option>
-	                         	<option th:each="paramTipoIdentificacion : ${listaParamTipoIdentificacion}" th:value="${paramTipoIdentificacion.parametro}" th:utext="${paramTipoIdentificacion.descripcion}"/>
+	                         	<option th:each="paramTipoIdentificacion : ${listaParamTipoIdentificacion}" th:value="${paramTipoIdentificacion.parametroPersona}" th:utext="${paramTipoIdentificacion.descripcion}"/>
 			                 </select>
 						</div>
 					</div>					
 					<div class="form-group row">
 						<label for="primerNombre" class="col-sm-2 col-form-label">Primer Nombre</label>
 						<div class="col-sm-6">
-							<input type="text" th:field="*{primerNombre}" class="form-control" th:errorclass="'form-control alert-danger'" />
+							<input type="text" th:field="*{primerNombre}" class="form-control text-uppercase" th:errorclass="'form-control alert-danger'" />
 							<small class="form-text text-danger" th:if="${#fields.hasErrors('primerNombre')}" th:errors="*{primerNombre}"></small>
 						</div>
 					</div>
 					<div class="form-group row">
 						<label for="segundoNombre" class="col-sm-2 col-form-label">Segundo Nombre</label>
 						<div class="col-sm-6">
-							<input type="text" th:field="*{segundoNombre}" class="form-control" th:errorclass="'form-control alert-danger'" />
+							<input type="text" th:field="*{segundoNombre}" class="form-control text-uppercase" th:errorclass="'form-control alert-danger'" />
 							<small class="form-text text-danger" th:if="${#fields.hasErrors('segundoNombre')}" th:errors="*{segundoNombre}"></small>
 						</div>
 					</div>
 					<div class="form-group row">
 						<label for="primerApellido" class="col-sm-2 col-form-label">Primer Apellido</label>
 						<div class="col-sm-6">
-							<input type="text" th:field="*{primerApellido}" class="form-control" th:errorclass="'form-control alert-danger'" />
+							<input type="text" th:field="*{primerApellido}" class="form-control text-uppercase" th:errorclass="'form-control alert-danger'" />
 							<small class="form-text text-danger" th:if="${#fields.hasErrors('primerApellido')}" th:errors="*{primerApellido}"></small>
 						</div>
 					</div>
 					<div class="form-group row">
 						<label for="segundoApellido" class="col-sm-2 col-form-label">Segundo Apellido</label>
 						<div class="col-sm-6">
-							<input type="text" th:field="*{segundoApellido}" class="form-control" th:errorclass="'form-control alert-danger'" />
+							<input type="text" th:field="*{segundoApellido}" class="form-control text-uppercase" th:errorclass="'form-control alert-danger'" />
 							<small class="form-text text-danger" th:if="${#fields.hasErrors('segundoApellido')}" th:errors="*{segundoApellido}"></small>
 						</div>
 					</div>					
@@ -73,7 +74,7 @@
 						<div class="col-sm-6">
 							 <select th:field="*{paramGenero}">
 	                         	<option value=""></option>
-	                         	<option th:each="paramGenero : ${listaParamGenero}" th:value="${paramGenero.parametro}" th:utext="${paramGenero.descripcion}"/>
+	                         	<option th:each="paramGenero : ${listaParamGenero}" th:value="${paramGenero.parametroPersona}" th:utext="${paramGenero.descripcion}"/>
 			                 </select>
 						</div>
 					</div>
@@ -82,28 +83,28 @@
 						<div class="col-sm-6">
 							 <select th:field="*{paramEstadoCivil}">
 	                         	<option value=""></option>
-	                         	<option th:each="paramEstadoCivil : ${listaParamEstadoCivil}" th:value="${paramEstadoCivil.parametro}" th:utext="${paramEstadoCivil.descripcion}"/>
+	                         	<option th:each="paramEstadoCivil : ${listaParamEstadoCivil}" th:value="${paramEstadoCivil.parametroPersona}" th:utext="${paramEstadoCivil.descripcion}"/>
 			                 </select>
 						</div>
 					</div>
 					<div class="form-group row">
 						<label for="direccionResidencia" class="col-sm-2 col-form-label">Dirección Residencia</label>
 						<div class="col-sm-6">
-							<input type="text" th:field="*{direccionResidencia}" class="form-control" th:errorclass="'form-control alert-danger'" />
+							<input type="text" th:field="*{direccionResidencia}" class="form-control text-uppercase" th:errorclass="'form-control alert-danger'" />
 							<small class="form-text text-danger" th:if="${#fields.hasErrors('direccionResidencia')}" th:errors="*{direccionResidencia}"></small>
 						</div>
 					</div>					
 					<div class="form-group row">
 						<label for="telefonoResidencia" class="col-sm-2 col-form-label">Teléfono Residencia</label>
 						<div class="col-sm-6">
-							<input type="text" th:field="*{telefonoResidencia}" class="form-control" th:errorclass="'form-control alert-danger'" />
+							<input type="text" th:field="*{telefonoResidencia}" class="form-control text-uppercase" th:errorclass="'form-control alert-danger'" />
 							<small class="form-text text-danger" th:if="${#fields.hasErrors('telefonoResidencia')}" th:errors="*{telefonoResidencia}"></small>
 						</div>
 					</div>					
 					<div class="form-group row">
 						<label for="celular" class="col-sm-2 col-form-label">Celular</label>
 						<div class="col-sm-6">
-							<input type="text" th:field="*{celular}" class="form-control" th:errorclass="'form-control alert-danger'" />
+							<input type="text" th:field="*{celular}" class="form-control text-uppercase" th:errorclass="'form-control alert-danger'" />
 							<small class="form-text text-danger" th:if="${#fields.hasErrors('celular')}" th:errors="*{celular}"></small>
 						</div>
 					</div>
@@ -119,7 +120,7 @@
 						<div class="col-sm-6">
 							 <select th:field="*{paramGrupoSanguineo}">
 	                         	<option value=""></option>
-	                         	<option th:each="paramGrupoSanguineo : ${listaParamGrupoSanguineo}" th:value="${paramGrupoSanguineo.parametro}" th:utext="${paramGrupoSanguineo.descripcion}"/>
+	                         	<option th:each="paramGrupoSanguineo : ${listaParamGrupoSanguineo}" th:value="${paramGrupoSanguineo.parametroPersona}" th:utext="${paramGrupoSanguineo.descripcion}"/>
 			                 </select>
 						</div>
 					</div>
@@ -128,7 +129,7 @@
 						<div class="col-sm-6">
 							 <select th:field="*{paramNivelAcademico}">
 	                         	<option value=""></option>
-	                         	<option th:each="paramNivelAcademico : ${listaParamNivelAcademico}" th:value="${paramNivelAcademico.parametro}" th:utext="${paramNivelAcademico.descripcion}"/>
+	                         	<option th:each="paramNivelAcademico : ${listaParamNivelAcademico}" th:value="${paramNivelAcademico.parametroPersona}" th:utext="${paramNivelAcademico.descripcion}"/>
 			                 </select>
 						</div>
 					</div>
@@ -137,7 +138,7 @@
 						<div class="col-sm-6">
 							 <select th:field="*{paramRaza}">
 	                         	<option value=""></option>
-	                         	<option th:each="paramRaza : ${listaParamRaza}" th:value="${paramRaza.parametro}" th:utext="${paramRaza.descripcion}"/>
+	                         	<option th:each="paramRaza : ${listaParamRaza}" th:value="${paramRaza.parametroPersona}" th:utext="${paramRaza.descripcion}"/>
 			                 </select>
 						</div>
 					</div>
@@ -146,196 +147,22 @@
 						<div class="col-sm-6">
 							 <select th:field="*{paramOcupacion}">
 	                         	<option value=""></option>
-	                         	<option th:each="paramOcupacion : ${listaParamOcupacion}" th:value="${paramOcupacion.parametro}" th:utext="${paramOcupacion.descripcion}"/>
+	                         	<option th:each="paramOcupacion : ${listaParamOcupacion}" th:value="${paramOcupacion.parametroPersona}" th:utext="${paramOcupacion.descripcion}"/>
 			                 </select>
 						</div>
 					</div>
 					<div class="form-group row">
 						<label for="estado" class="col-sm-2 col-form-label">Estado</label>
 						<div class="col-sm-6">
-							<input type="text" class="form-control" th:field="*{estado}" th:errorclass="'form-control alert-danger'" th:disabled="true" />
+							<input type="text" class="form-control text-uppercase" th:field="*{estado}" th:errorclass="'form-control alert-danger'" th:disabled="true" />
 							<small class="form-text text-danger" th:if="${#fields.hasErrors('estado')}" th:errors="*{estado}"></small>
 						</div>
 					</div>
 
 					<div class="form-group row">
 						<div class="col-sm-6">
-							<input type="submit" th:value="${lblBotonGuardar}" class="btn btn-secondary" />
-							<a class="btn btn-secondary btn-xs"	th:href="@{'/paciente/listarPaciente'}" th:text="Cancelar"></a>
-						</div>
-					</div>
-				</form>
-				
-			</div>
-		</div>
-	</div>
-
-	<footer th:replace="layout/layout :: footer"></footer>
-</body>
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="layout/layout :: head"></head>
-<body>
-
-	<header th:replace="layout/layout :: header"></header>
-
-	<div class="container py-4">
-		<div class="card bg-dark text-white">
-			<div class="card-header" th:text="${lblTituloFormularioPaciente}"></div>
-			<div class="card-body">
-				<div th:object="${pacienteEntity}" th:remove="tag">
-					<ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
-						<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
-					</ul>
-				</div>
-
-				<form th:action="@{/paciente/formPaciente}" th:object="${pacienteEntity}" method="post" enctype="multipart/form-data">
-				
-					<div class="form-group row">
-						<label for="numeroIdentificacion" class="col-sm-2 col-form-label">Número Identificación</label>
-						<div class="col-sm-6">
-							<input type="text" th:field="*{numeroIdentificacion}" class="form-control" th:errorclass="'form-control alert-danger'" />
-							<small class="form-text text-danger" th:if="${#fields.hasErrors('numeroIdentificacion')}" th:errors="*{numeroIdentificacion}"></small>
-						</div>
-					</div>
-					<div class="form-group row">
-						<label for="paramTipoIdentificacion" class="col-sm-2 col-form-label">Tipo de Identificación</label>
-						<div class="col-sm-6">
-							 <select th:field="*{paramTipoIdentificacion}">
-	                         	<option value=""></option>
-	                         	<option th:each="paramTipoIdentificacion : ${listaParamTipoIdentificacion}" th:value="${paramTipoIdentificacion.parametro}" th:utext="${paramTipoIdentificacion.descripcion}"/>
-			                 </select>
-						</div>
-					</div>					
-					<div class="form-group row">
-						<label for="primerNombre" class="col-sm-2 col-form-label">Primer Nombre</label>
-						<div class="col-sm-6">
-							<input type="text" th:field="*{primerNombre}" class="form-control" th:errorclass="'form-control alert-danger'" />
-							<small class="form-text text-danger" th:if="${#fields.hasErrors('primerNombre')}" th:errors="*{primerNombre}"></small>
-						</div>
-					</div>
-					<div class="form-group row">
-						<label for="segundoNombre" class="col-sm-2 col-form-label">Segundo Nombre</label>
-						<div class="col-sm-6">
-							<input type="text" th:field="*{segundoNombre}" class="form-control" th:errorclass="'form-control alert-danger'" />
-							<small class="form-text text-danger" th:if="${#fields.hasErrors('segundoNombre')}" th:errors="*{segundoNombre}"></small>
-						</div>
-					</div>
-					<div class="form-group row">
-						<label for="primerApellido" class="col-sm-2 col-form-label">Primer Apellido</label>
-						<div class="col-sm-6">
-							<input type="text" th:field="*{primerApellido}" class="form-control" th:errorclass="'form-control alert-danger'" />
-							<small class="form-text text-danger" th:if="${#fields.hasErrors('primerApellido')}" th:errors="*{primerApellido}"></small>
-						</div>
-					</div>
-					<div class="form-group row">
-						<label for="segundoApellido" class="col-sm-2 col-form-label">Segundo Apellido</label>
-						<div class="col-sm-6">
-							<input type="text" th:field="*{segundoApellido}" class="form-control" th:errorclass="'form-control alert-danger'" />
-							<small class="form-text text-danger" th:if="${#fields.hasErrors('segundoApellido')}" th:errors="*{segundoApellido}"></small>
-						</div>
-					</div>					
-					<div class="form-group row">
-						<label for="fechaNacimiento" class="col-sm-2 col-form-label">Fecha de Nacimiento</label>
-						<div class="col-sm-6">
-							<input type="text" class="form-control" th:field="*{fechaNacimiento}" th:errorclass="'form-control alert-danger'" />
-							<small class="form-text text-danger" th:if="${#fields.hasErrors('fechaNacimiento')}" th:errors="*{fechaNacimiento}"></small>
-						</div>
-					</div>					
-					<div class="form-group row">
-						<label for="paramGenero" class="col-sm-2 col-form-label">Género</label>
-						<div class="col-sm-6">
-							 <select th:field="*{paramGenero}">
-	                         	<option value=""></option>
-	                         	<option th:each="paramGenero : ${listaParamGenero}" th:value="${paramGenero.parametro}" th:utext="${paramGenero.descripcion}"/>
-			                 </select>
-						</div>
-					</div>
-					<div class="form-group row">
-						<label for="paramEstadoCivil" class="col-sm-2 col-form-label">Estado Civil</label>
-						<div class="col-sm-6">
-							 <select th:field="*{paramEstadoCivil}">
-	                         	<option value=""></option>
-	                         	<option th:each="paramEstadoCivil : ${listaParamEstadoCivil}" th:value="${paramEstadoCivil.parametro}" th:utext="${paramEstadoCivil.descripcion}"/>
-			                 </select>
-						</div>
-					</div>
-					<div class="form-group row">
-						<label for="direccionResidencia" class="col-sm-2 col-form-label">Dirección Residencia</label>
-						<div class="col-sm-6">
-							<input type="text" th:field="*{direccionResidencia}" class="form-control" th:errorclass="'form-control alert-danger'" />
-							<small class="form-text text-danger" th:if="${#fields.hasErrors('direccionResidencia')}" th:errors="*{direccionResidencia}"></small>
-						</div>
-					</div>					
-					<div class="form-group row">
-						<label for="telefonoResidencia" class="col-sm-2 col-form-label">Teléfono Residencia</label>
-						<div class="col-sm-6">
-							<input type="text" th:field="*{telefonoResidencia}" class="form-control" th:errorclass="'form-control alert-danger'" />
-							<small class="form-text text-danger" th:if="${#fields.hasErrors('telefonoResidencia')}" th:errors="*{telefonoResidencia}"></small>
-						</div>
-					</div>					
-					<div class="form-group row">
-						<label for="celular" class="col-sm-2 col-form-label">Celular</label>
-						<div class="col-sm-6">
-							<input type="text" th:field="*{celular}" class="form-control" th:errorclass="'form-control alert-danger'" />
-							<small class="form-text text-danger" th:if="${#fields.hasErrors('celular')}" th:errors="*{celular}"></small>
-						</div>
-					</div>
-					<div class="form-group row">
-						<label for="email" class="col-sm-2 col-form-label">email</label>
-						<div class="col-sm-6">
-							<input type="text" th:field="*{email}" class="form-control" th:errorclass="'form-control alert-danger'" />
-							<small class="form-text text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></small>
-						</div>
-					</div>
-					<div class="form-group row">
-						<label for="paramGrupoSanguineo" class="col-sm-2 col-form-label">Grupo Sanguineo</label>
-						<div class="col-sm-6">
-							 <select th:field="*{paramGrupoSanguineo}">
-	                         	<option value=""></option>
-	                         	<option th:each="paramGrupoSanguineo : ${listaParamGrupoSanguineo}" th:value="${paramGrupoSanguineo.parametro}" th:utext="${paramGrupoSanguineo.descripcion}"/>
-			                 </select>
-						</div>
-					</div>
-					<div class="form-group row">
-						<label for="paramNivelAcademico" class="col-sm-2 col-form-label">Nivel Académico</label>
-						<div class="col-sm-6">
-							 <select th:field="*{paramNivelAcademico}">
-	                         	<option value=""></option>
-	                         	<option th:each="paramNivelAcademico : ${listaParamNivelAcademico}" th:value="${paramNivelAcademico.parametro}" th:utext="${paramNivelAcademico.descripcion}"/>
-			                 </select>
-						</div>
-					</div>
-					<div class="form-group row">
-						<label for="paramRaza" class="col-sm-2 col-form-label">Raza</label>
-						<div class="col-sm-6">
-							 <select th:field="*{paramRaza}">
-	                         	<option value=""></option>
-	                         	<option th:each="paramRaza : ${listaParamRaza}" th:value="${paramRaza.parametro}" th:utext="${paramRaza.descripcion}"/>
-			                 </select>
-						</div>
-					</div>
-					<div class="form-group row">
-						<label for="paramOcupacion" class="col-sm-2 col-form-label">Ocupación</label>
-						<div class="col-sm-6">
-							 <select th:field="*{paramOcupacion}">
-	                         	<option value=""></option>
-	                         	<option th:each="paramOcupacion : ${listaParamOcupacion}" th:value="${paramOcupacion.parametro}" th:utext="${paramOcupacion.descripcion}"/>
-			                 </select>
-						</div>
-					</div>
-					<div class="form-group row">
-						<label for="estado" class="col-sm-2 col-form-label">Estado</label>
-						<div class="col-sm-6">
-							<input type="text" class="form-control" th:field="*{estado}" th:errorclass="'form-control alert-danger'" th:disabled="true" />
-							<small class="form-text text-danger" th:if="${#fields.hasErrors('estado')}" th:errors="*{estado}"></small>
-						</div>
-					</div>
-
-					<div class="form-group row">
-						<div class="col-sm-6">
-							<input type="submit" th:value="${lblBotonGuardar}" class="btn btn-secondary" />
-							<a class="btn btn-secondary btn-xs"	th:href="@{'/paciente/listarPaciente'}" th:text="Cancelar"></a>
+							<input class="btn btn-secondary" type="submit" th:value="Guardar"/>
+							<a class="btn btn-secondary btn-xs"	th:href="@{'/paciente/listPaciente'}" th:text="Cancelar"></a>
 						</div>
 					</div>
 				</form>

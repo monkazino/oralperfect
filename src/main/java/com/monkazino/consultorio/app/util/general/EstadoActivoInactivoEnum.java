@@ -1,6 +1,6 @@
 package com.monkazino.consultorio.app.util.general;
 
-public enum EstadoParametroEnum {
+public enum EstadoActivoInactivoEnum {
 	
 	ACTIVO ("A", "Activo"),
 	INACTIVO ("I", "Inactivo");
@@ -8,7 +8,7 @@ public enum EstadoParametroEnum {
 	private String codigo;
 	private String descripcion;
 	
-	private EstadoParametroEnum (String codigo, String descripcion) {
+	private EstadoActivoInactivoEnum (String codigo, String descripcion) {
 		this.codigo = codigo;
 		this.descripcion = descripcion;
 	}

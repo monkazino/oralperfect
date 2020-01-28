@@ -19,6 +19,10 @@ public interface ITipoParametroPersonaService {
 	
 	public void delete(Long id);
 	
-	public TipoParametroPersonaEntity fetchByIdWithParametrosPersona(Long id);
+	public TipoParametroPersonaEntity fetchByIdWithParametrosPersona(Long tipoParametroPersona);
+
+	public int consultarCountTipoParametroPersonaByCodigo(String codigo);
+	
+	public int consultarCountTipoParametroPersonaByCodigoTipoParametroPersona(String codigo, Long tipoParametroPersona);
 	
 }

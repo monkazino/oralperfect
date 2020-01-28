@@ -56,4 +56,15 @@ public class BarrioService implements IBarrioService {
 		return (List<BarrioEntity>) barrioDao.consultarBarriosLocalidad(localidad);
 	}
 
+	@Override
+	@Transactional(readOnly = true)
+	public int consultarCountBarrioByCodigoLocalidad(String codigo, Long localidad) {
+		return barrioDao.consultarCountBarrioByCodigoLocalidad(codigo, localidad);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public int consultarCountBarrioByCodigoBarrioLocalidad(String codigo, Long barrio, Long localidad) {
+		return barrioDao.consultarCountBarrioByCodigoBarrioLocalidad(codigo, barrio, localidad);
+	}
 }

@@ -69,7 +69,7 @@ public class PacienteController {
 		PacienteEntity pacienteEntity = pacienteService.findOne(id);
 		if (pacienteEntity == null) {
 			flash.addFlashAttribute("error", "El paciente no existe en la base de datos");
-			return "redirect:/paciente/listarPaciente";
+			return "redirect:/paciente/listPaciente";
 		}
 
 		model.put("pacienteEntity", pacienteEntity);
@@ -77,8 +77,8 @@ public class PacienteController {
 		return "paciente/verPaciente";
 	}
 
-	@RequestMapping(value = {"/paciente/listarPaciente"}, method = RequestMethod.GET)
-	public String listarPaciente(@RequestParam(name = "page", defaultValue = "0") int page, Model model,
+	@RequestMapping(value = {"/paciente/listPaciente"}, method = RequestMethod.GET)
+	public String listPaciente(@RequestParam(name = "page", defaultValue = "0") int page, Model model,
 			Authentication authentication,
 			HttpServletRequest request) {
 
@@ -116,34 +116,34 @@ public class PacienteController {
 
 		Page<PacienteEntity> pacientes = pacienteService.findAll(pageRequest);
 
-		PageRender<PacienteEntity> pageRender = new PageRender<PacienteEntity>("/paciente/listarPaciente", pacientes);
+		PageRender<PacienteEntity> pageRender = new PageRender<PacienteEntity>("/paciente/listPaciente", pacientes);
 		model.addAttribute("lblTituloListadoPaciente", "Listado de pacientes");
 		model.addAttribute("pacientes", pacientes);
 		model.addAttribute("page", pageRender);
-		return "paciente/listarPaciente";
+		return "paciente/listPaciente";
 	}
 
 	public void inicializarParametrosPersona() {
 		listaParamTipoIdentificacion = new ArrayList<ParametroPersonaEntity>();
-		listaParamTipoIdentificacion = parametroPersonaService.consultarParametrosPersonaTipoParametro(ParametroPacienteEnum.TIPO_IDENTIFICACION.getCodigo());
+		listaParamTipoIdentificacion = parametroPersonaService.consultarParametrosPersonaTipoParametroPersona(ParametroPacienteEnum.TIPO_IDENTIFICACION.getCodigo());
 		
 		listaParamGenero = new ArrayList<ParametroPersonaEntity>();
-		listaParamGenero = parametroPersonaService.consultarParametrosPersonaTipoParametro(ParametroPacienteEnum.GENERO.getCodigo());
+		listaParamGenero = parametroPersonaService.consultarParametrosPersonaTipoParametroPersona(ParametroPacienteEnum.GENERO.getCodigo());
 		
 		listaParamEstadoCivil = new ArrayList<ParametroPersonaEntity>();
-		listaParamEstadoCivil = parametroPersonaService.consultarParametrosPersonaTipoParametro(ParametroPacienteEnum.ESTADO_CIVIL.getCodigo());
+		listaParamEstadoCivil = parametroPersonaService.consultarParametrosPersonaTipoParametroPersona(ParametroPacienteEnum.ESTADO_CIVIL.getCodigo());
 		
 		listaParamGrupoSanguineo = new ArrayList<ParametroPersonaEntity>();
-		listaParamGrupoSanguineo = parametroPersonaService.consultarParametrosPersonaTipoParametro(ParametroPacienteEnum.GRUPO_SANGUINEO.getCodigo());
+		listaParamGrupoSanguineo = parametroPersonaService.consultarParametrosPersonaTipoParametroPersona(ParametroPacienteEnum.GRUPO_SANGUINEO.getCodigo());
 		
 		listaParamNivelAcademico = new ArrayList<ParametroPersonaEntity>();
-		listaParamNivelAcademico = parametroPersonaService.consultarParametrosPersonaTipoParametro(ParametroPacienteEnum.NIVEL_ACADEMICO.getCodigo());
+		listaParamNivelAcademico = parametroPersonaService.consultarParametrosPersonaTipoParametroPersona(ParametroPacienteEnum.NIVEL_ACADEMICO.getCodigo());
 		
 		listaParamRaza = new ArrayList<ParametroPersonaEntity>();
-		listaParamRaza = parametroPersonaService.consultarParametrosPersonaTipoParametro(ParametroPacienteEnum.RAZA.getCodigo());
+		listaParamRaza = parametroPersonaService.consultarParametrosPersonaTipoParametroPersona(ParametroPacienteEnum.RAZA.getCodigo());
 		
 		listaParamOcupacion = new ArrayList<ParametroPersonaEntity>();
-		listaParamOcupacion = parametroPersonaService.consultarParametrosPersonaTipoParametro(ParametroPacienteEnum.OCUPACION.getCodigo());
+		listaParamOcupacion = parametroPersonaService.consultarParametrosPersonaTipoParametroPersona(ParametroPacienteEnum.OCUPACION.getCodigo());
 	}
 
 	@Secured("ROLE_ADMIN")
@@ -163,7 +163,6 @@ public class PacienteController {
 		model.put("listaParamRaza", listaParamRaza);
 		model.put("listaParamOcupacion", listaParamOcupacion);
 		model.put("lblTituloFormularioPaciente", "Paciente");
-		model.put("lblBotonGuardar", "Guardar");
 		return "paciente/formPaciente";
 	}
 	
@@ -177,11 +176,11 @@ public class PacienteController {
 			pacienteEntity = pacienteService.findOne(id);
 			if (pacienteEntity == null) {
 				flash.addFlashAttribute("error", "El ID del paciente no existe en la BBDD!");
-				return "redirect:/paciente/listarPaciente";
+				return "redirect:/paciente/listPaciente";
 			}
 		} else {
 			flash.addFlashAttribute("error", "El ID del paciente no puede ser cero!");
-			return "redirect:/paciente/listarPaciente";
+			return "redirect:/paciente/listPaciente";
 		}
 		model.put("pacienteEntity", pacienteEntity);
 		model.put("listaParamTipoIdentificacion", listaParamTipoIdentificacion);
@@ -192,7 +191,6 @@ public class PacienteController {
 		model.put("listaParamRaza", listaParamRaza);
 		model.put("listaParamOcupacion", listaParamOcupacion);
 		model.put("lblTituloFormularioPaciente", "Paciente");
-		model.put("lblBotonGuardar", "Guardar");
 		return "paciente/formPaciente";
 	}
 	
@@ -206,14 +204,13 @@ public class PacienteController {
 			pacienteEntity = pacienteService.findOne(id);
 			if (pacienteEntity == null) {
 				flash.addFlashAttribute("error", "El ID del paciente no existe en la BBDD!");
-				return "redirect:/paciente/listarPaciente";
+				return "redirect:/paciente/listPaciente";
 			}
 		} else {
 			flash.addFlashAttribute("error", "El ID del paciente no puede ser cero!");
-			return "redirect:/paciente/listarPaciente";
+			return "redirect:/paciente/listPaciente";
 		}
 		model.put("pacienteEntity", pacienteEntity);
-		model.put("lblBotonGuardar", "Guardar");
 		return "paciente/formPacienteReferencia";
 	}
 
@@ -231,7 +228,6 @@ public class PacienteController {
 			model.addAttribute("listaParamNivelAcademico", listaParamNivelAcademico);
 			model.addAttribute("listaParamRaza", listaParamRaza);
 			model.addAttribute("listaParamOcupacion", listaParamOcupacion);
-			model.addAttribute("lblBotonGuardar", "Guardar");
 			return "paciente/formPaciente";
 		}
 
@@ -251,7 +247,7 @@ public class PacienteController {
 			pacienteService.delete(id);
 			flash.addFlashAttribute("success", "Paciente eliminado con éxito!");
 		}
-		return "redirect:/paciente/listarPaciente";
+		return "redirect:/paciente/listPaciente";
 	}
 	
 	private boolean hasRole(String role) {

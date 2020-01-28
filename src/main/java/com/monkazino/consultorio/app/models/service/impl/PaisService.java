@@ -33,14 +33,14 @@ public class PaisService implements IPaisService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public PaisEntity findOne(Long id) {
-		return paisDao.findById(id).orElse(null);
+	public PaisEntity findOne(Long departamento) {
+		return paisDao.findById(departamento).orElse(null);
 	}
 	
 	@Override
 	@Transactional
-	public void delete(Long id) {
-		paisDao.deleteById(id);
+	public void delete(Long departamento) {
+		paisDao.deleteById(departamento);
 
 	}
 
@@ -52,8 +52,19 @@ public class PaisService implements IPaisService {
 	
 	@Override
 	@Transactional(readOnly = true)
-	public PaisEntity fetchByIdWithDepartamentos(Long id) {
-		return paisDao.fetchByIdWithDepartamentos(id);
+	public PaisEntity fetchByIdWithDepartamentos(Long pais) {
+		return paisDao.fetchByIdWithDepartamentos(pais);
 	}
 
+	@Override
+	@Transactional(readOnly = true)
+	public int consultarCountPaisByCodigo(String codigo) {
+		return paisDao.consultarCountPaisByCodigo(codigo);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public int consultarCountPaisByCodigoPais(String codigo, Long pais) {
+		return paisDao.consultarCountPaisByCodigoPais(codigo, pais);
+	}
 }

@@ -15,10 +15,14 @@ public interface IParametroPersonaService {
 
 	public void save(ParametroPersonaEntity parametroPersonaEntity);
 	
-	public ParametroPersonaEntity findOne(Long id);
+	public ParametroPersonaEntity findOne(Long parametroPersona);
 	
-	public void delete(Long id);
+	public void delete(Long parametroPersona);
 	
-	public List<ParametroPersonaEntity> consultarParametrosPersonaTipoParametro(String codigoTipoParametro);
+	public List<ParametroPersonaEntity> consultarParametrosPersonaTipoParametroPersona(String codigoTipoParametroPersona);
+
+	public int consultarCountParametroPersonaByCodigoTipoParametroPersona(String codigo, Long tipoParametroPersona);
+	
+	public int consultarCountParametroPersonaByCodigoParametroPersonaTipoParametroPersona(String codigo, Long parametroPersona, Long tipoParametroPersona);
 	
 }

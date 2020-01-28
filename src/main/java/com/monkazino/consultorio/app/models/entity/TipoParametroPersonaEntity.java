@@ -21,15 +21,15 @@ import javax.validation.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-@Table(name = "TB_PERS_PARAM_TIPO_PARAMETRO")
+@Table(name = "TB_PARAM_TIPO_PARAMETRO_PERSONA")
 public class TipoParametroPersonaEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column (name = "TIPO_PARAMETRO")
-	private Long tipoParametro;
+	@Column (name = "TIPO_PARAMETRO_PERSONA")
+	private Long tipoParametroPersona;
 
 	@NotNull
 	@NotEmpty
@@ -63,12 +63,12 @@ public class TipoParametroPersonaEntity implements Serializable {
 		parametrosPersona = new ArrayList<ParametroPersonaEntity>();
 	}
 
-	public Long getTipoParametro() {
-		return tipoParametro;
+	public Long getTipoParametroPersona() {
+		return tipoParametroPersona;
 	}
 
-	public void setTipoParametro(Long tipoParametro) {
-		this.tipoParametro = tipoParametro;
+	public void setTipoParametroPersona(Long tipoParametroPersona) {
+		this.tipoParametroPersona = tipoParametroPersona;
 	}
 	
 	public String getCodigo() {
@@ -119,7 +119,7 @@ public class TipoParametroPersonaEntity implements Serializable {
 		this.parametrosPersona = parametrosPersona;
 	}
 	
-	public void addParametro(ParametroPersonaEntity parametroPersonaEntity) {
+	public void addParametroPersona(ParametroPersonaEntity parametroPersonaEntity) {
 		parametrosPersona.add(parametroPersonaEntity);
 	}
 	

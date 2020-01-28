@@ -15,10 +15,14 @@ public interface IPaisService {
 
 	public void save(PaisEntity paisEntity);
 	
-	public PaisEntity findOne(Long id);
+	public PaisEntity findOne(Long pais);
 	
-	public void delete(Long id);
+	public void delete(Long departamento);
 	
-	public PaisEntity fetchByIdWithDepartamentos(Long id);
+	public PaisEntity fetchByIdWithDepartamentos(Long pais);
+	
+	public int consultarCountPaisByCodigo(String codigo);
+	
+	public int consultarCountPaisByCodigoPais(String codigo, Long pais);
 
 }

@@ -58,8 +58,19 @@ public class LocalidadService implements ILocalidadService {
 	
 	@Override
 	@Transactional(readOnly = true)
-	public LocalidadEntity fetchByIdWithBarrios(Long id) {
-		return localidadDao.fetchByIdWithBarrios(id);
+	public LocalidadEntity fetchByIdWithBarrios(Long localidad) {
+		return localidadDao.fetchByIdWithBarrios(localidad);
 	}
 
+	@Override
+	@Transactional(readOnly = true)
+	public int consultarCountLocalidadByCodigoCiudad(String codigo, Long ciudad) {
+		return localidadDao.consultarCountLocalidadByCodigoCiudad(codigo, ciudad);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public int consultarCountLocalidadByCodigoLocalidadCiudad(String codigo, Long localidad, Long ciudad) {
+		return localidadDao.consultarCountLocalidadByCodigoLocalidadCiudad(codigo, localidad, ciudad);
+	}
 }

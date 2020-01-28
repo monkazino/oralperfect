@@ -15,10 +15,14 @@ public interface IBarrioService {
 
 	public void save(BarrioEntity barrioEntity);
 	
-	public BarrioEntity findOne(Long id);
+	public BarrioEntity findOne(Long barrio);
 	
-	public void delete(Long id);
+	public void delete(Long barrio);
 	
 	public List<BarrioEntity> consultarBarriosLocalidad(Long localidad);
+
+	public int consultarCountBarrioByCodigoLocalidad(String codigo, Long localidad);
+	
+	public int consultarCountBarrioByCodigoBarrioLocalidad(String codigo, Long barrio, Long localidad);
 
 }

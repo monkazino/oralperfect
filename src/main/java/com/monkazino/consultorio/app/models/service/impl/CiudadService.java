@@ -58,8 +58,19 @@ public class CiudadService implements ICiudadService {
 	
 	@Override
 	@Transactional(readOnly = true)
-	public CiudadEntity fetchByIdWithLocalidades(Long id) {
-		return ciudadDao.fetchByIdWithLocalidades(id);
+	public CiudadEntity fetchByIdWithLocalidades(Long ciudad) {
+		return ciudadDao.fetchByIdWithLocalidades(ciudad);
 	}
 
+	@Override
+	@Transactional(readOnly = true)
+	public int consultarCountCiudadByCodigoDepartamento(String codigo, Long departamento) {
+		return ciudadDao.consultarCountCiudadByCodigoDepartamento(codigo, departamento);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public int consultarCountCiudadByCodigoCiudadDepartamento(String codigo, Long ciudad, Long departamento) {
+		return ciudadDao.consultarCountCiudadByCodigoCiudadDepartamento(codigo, ciudad, departamento);
+	}
 }

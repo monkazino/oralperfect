@@ -7,8 +7,8 @@
 
 	<div class="container py-4">
 		<div class="card bg-dark text-white">
-			<div class="card-header" th:text="${lblTituloFormTipoParametroPersona}"></div>
 			<div class="card-header" th:text="${lblTituloFormularioTipoParametroPersona}"></div>
+			<div class="alert alert-danger" th:if="${mensajeErrorTipoParametroPersona != null}" th:text="${mensajeErrorTipoParametroPersona}"></div>
 			<div class="card-body">
 				<div th:object="${tipoParametroPersonaEntity}" th:remove="tag">
 					<ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
@@ -21,21 +21,21 @@
 					<div class="form-group row">
 						<label for="codigo" class="col-sm-2 col-form-label">Código</label>
 						<div class="col-sm-6">
-							<input type="text" th:field="*{codigo}" class="form-control" th:errorclass="'form-control alert-danger'" />
+							<input type="text" th:field="*{codigo}" class="form-control text-uppercase" th:errorclass="'form-control alert-danger'" />
 							<small class="form-text text-danger" th:if="${#fields.hasErrors('codigo')}" th:errors="*{codigo}"></small>
 						</div>
 					</div>
 					<div class="form-group row">
 						<label for="descripcion" class="col-sm-2 col-form-label">Descripción</label>
 						<div class="col-sm-6">
-							<input type="text" th:field="*{descripcion}" class="form-control" th:errorclass="'form-control alert-danger'" />
+							<input type="text" th:field="*{descripcion}" class="form-control text-uppercase" th:errorclass="'form-control alert-danger'" />
 							<small class="form-text text-danger" th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></small>
 						</div>
 					</div>
 					<div class="form-group row">
 						<label for="observacion" class="col-sm-2 col-form-label">Observación</label>
 						<div class="col-sm-6">
-							<input type="text" th:field="*{observacion}" class="form-control" th:errorclass="'form-control alert-danger'" />
+							<input type="text" th:field="*{observacion}" class="form-control text-uppercase" th:errorclass="'form-control alert-danger'" />
 							<small class="form-text text-danger" th:if="${#fields.hasErrors('observacion')}" th:errors="*{observacion}"></small>
 						</div>
 					</div>
@@ -49,15 +49,15 @@
 					<div class="form-group row">
 						<label for="estado" class="col-sm-2 col-form-label">Estado</label>
 						<div class="col-sm-6">
-							<input type="text" class="form-control" th:field="*{estado}" th:errorclass="'form-control alert-danger'" th:disabled="true" />
+							<input type="text" class="form-control text-uppercase" th:field="*{estado}" th:errorclass="'form-control alert-danger'" th:disabled="true" />
 							<small class="form-text text-danger" th:if="${#fields.hasErrors('estado')}" th:errors="*{estado}"></small>
 						</div>
 					</div>
 					
 					<div class="form-group row">
 						<div class="col-sm-6">
-							<input type="submit" th:value="${lblBotonGuardar}" class="btn btn-secondary" />
-							<a class="btn btn-secondary btn-xs"	th:href="@{'/tipoParametroPersona/listarTipoParametroPersona'}" th:text="Cancelar"></a>
+							<input class="btn btn-secondary" type="submit" th:value="Guardar"/>
+							<a class="btn btn-secondary btn-xs"	th:href="@{'/tipoParametroPersona/listTipoParametroPersona'}" th:text="Cancelar"></a>
 						</div>
 					</div>
 					
