@@ -17,12 +17,12 @@
 				<table class="table table-striped table-bordered">
 					<thead class="thead-inverse">
 						<tr>
-							<th sec:authorize="hasRole('ROLE_USER')">Id</th>
 							<th>Código</th>
 							<th>Descripción</th>
 							<th>Observación</th>
 							<th>Fecha Creación</th>
 							<th>Estado</th>
+							<th sec:authorize="hasRole('ROLE_USER')">Parámetros</th>
 							<th sec:authorize="hasRole('ROLE_ADMIN')">Editar</th>
 							<th sec:authorize="hasRole('ROLE_ADMIN')">Eliminar</th>
 						</tr>
@@ -35,7 +35,7 @@
 							<td th:text="${tipoParametroPersonaEntity.fechaCreacion}"></td>
 							<td th:text="${tipoParametroPersonaEntity.estado}"></td>
 							<td sec:authorize="hasRole('ROLE_USER')"><a class="btn btn-primary btn-xs" 
-							th:href="@{/tipoParametroPersona/listParametroPersona/} + ${tipoParametroPersonaEntity.tipoParametroPersona}" th:text="'Editar'"></a></td>
+							th:href="@{/tipoParametroPersona/listParametroPersona/} + ${tipoParametroPersonaEntity.tipoParametroPersona}" th:text="'Parámetros'"></a></td>
 							<td sec:authorize="hasRole('ROLE_ADMIN')">
 								<a class="btn btn-primary btn-xs" th:href="@{/tipoParametroPersona/formTipoParametroPersona/} + ${tipoParametroPersonaEntity.tipoParametroPersona}" th:text="'Editar'"></a>
 							</td>
