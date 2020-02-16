@@ -29,18 +29,19 @@
 					</thead>
 					<tbody>
 						<tr th:each="tipoParametroPersonaEntity: ${tipoParametrosPersona}">
-							<td sec:authorize="hasRole('ROLE_USER')"><a class="btn btn-primary btn-xs" 
-							th:href="@{/tipoParametroPersona/listParametroPersona/} + ${tipoParametroPersonaEntity.tipoParametroPersona}" th:text="${tipoParametroPersonaEntity.tipoParametroPersona}"></a></td>
 							<td th:text="${tipoParametroPersonaEntity.codigo}"></td>
 							<td th:text="${tipoParametroPersonaEntity.descripcion}"></td>
 							<td th:text="${tipoParametroPersonaEntity.observacion}"></td>
 							<td th:text="${tipoParametroPersonaEntity.fechaCreacion}"></td>
 							<td th:text="${tipoParametroPersonaEntity.estado}"></td>
-							<td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-primary btn-xs"
-								th:href="@{/tipoParametroPersona/formTipoParametroPersona/} + ${tipoParametroPersonaEntity.tipoParametroPersona}" th:text="'Editar'"></a></td>
-							<td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-danger btn-xs"
-								th:href="@{/eliminarTipoParametroPersona/} + ${tipoParametroPersonaEntity.tipoParametroPersona}" th:text="'Eliminar'"
-								onclick="return confirm('Estas seguro que quieres eliminar?');"></a></td>
+							<td sec:authorize="hasRole('ROLE_USER')"><a class="btn btn-primary btn-xs" 
+							th:href="@{/tipoParametroPersona/listParametroPersona/} + ${tipoParametroPersonaEntity.tipoParametroPersona}" th:text="'Editar'"></a></td>
+							<td sec:authorize="hasRole('ROLE_ADMIN')">
+								<a class="btn btn-primary btn-xs" th:href="@{/tipoParametroPersona/formTipoParametroPersona/} + ${tipoParametroPersonaEntity.tipoParametroPersona}" th:text="'Editar'"></a>
+							</td>
+							<td sec:authorize="hasRole('ROLE_ADMIN')">
+								<a class="btn btn-danger btn-xs" th:href="@{/eliminarTipoParametroPersona/} + ${tipoParametroPersonaEntity.tipoParametroPersona}" th:text="'Eliminar'" onclick="return confirm('Estas seguro que quieres eliminar?');"></a>
+							</td>
 						</tr>
 					</tbody>
 
