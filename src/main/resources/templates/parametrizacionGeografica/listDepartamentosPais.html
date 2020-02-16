@@ -23,18 +23,15 @@
 					class="table table-bordered table-striped my-4">
 					<thead class="thead-inverse">
 						<tr>
-							<th>Id</th>
 							<th>Código</th>
 							<th>Descripción</th>
 							<th sec:authorize="hasRole('ROLE_ADMIN')">Editar</th>
 							<th sec:authorize="hasRole('ROLE_ADMIN')">Eliminar</th>
+							<th></th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr th:each="departamentoEntity: ${paisEntity.departamentos}">
-							<td sec:authorize="hasRole('ROLE_USER')">
-								<a class="btn btn-primary btn-xs" th:href="@{/parametrizacionGeografica/listCiudadesDepartamento/} + ${departamentoEntity.departamento}" th:text="${departamentoEntity.departamento}"></a>
-							</td>
 							<td th:text="${departamentoEntity.codigo}"></td>
 							<td th:text="${departamentoEntity.descripcion}"></td>
 							<td sec:authorize="hasRole('ROLE_ADMIN')">
@@ -42,6 +39,9 @@
 							</td>
 							<td sec:authorize="hasRole('ROLE_ADMIN')">
 								<a class="btn btn-danger btn-xs" th:href="@{/eliminarDepartamento/} + ${departamentoEntity.departamento}" th:text="'Eliminar'" onclick="return confirm('¿Desea eliminar registro?');"></a>
+							</td>
+							<td sec:authorize="hasRole('ROLE_USER')">
+								<a class="btn btn-primary btn-xs" th:href="@{/parametrizacionGeografica/listCiudadesDepartamento/} + ${departamentoEntity.departamento}" th:text="'Ciudades'"></a>
 							</td>
 						</tr>
 					</tbody>
