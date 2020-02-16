@@ -132,7 +132,7 @@ public class TipoParametroPersonaController {
 		return "tipoParametroPersona/listParametroPersona";
 	}
 
-	@RequestMapping(value = {"/tipoParametroPersona/listTipoParametroPersona", "/"}, method = RequestMethod.GET)
+	@RequestMapping(value = {"/tipoParametroPersona/listTipoParametroPersona"}, method = RequestMethod.GET)
 	public String listTipoParametroPersona(@RequestParam(name = "page", defaultValue = "0") int page, Model model,
 			Authentication authentication,
 			HttpServletRequest request) {

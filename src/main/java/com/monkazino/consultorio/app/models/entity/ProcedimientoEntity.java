@@ -38,6 +38,7 @@ public class ProcedimientoEntity implements Serializable {
 	private String estado;
 	
 	public ProcedimientoEntity() {
+		
 	}
 
 	public Long getProcedimiento() {
