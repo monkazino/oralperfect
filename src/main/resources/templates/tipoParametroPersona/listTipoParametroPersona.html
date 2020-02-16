@@ -22,9 +22,9 @@
 							<th>Observación</th>
 							<th>Fecha Creación</th>
 							<th>Estado</th>
-							<th sec:authorize="hasRole('ROLE_USER')">Parámetros</th>
 							<th sec:authorize="hasRole('ROLE_ADMIN')">Editar</th>
 							<th sec:authorize="hasRole('ROLE_ADMIN')">Eliminar</th>
+							<th sec:authorize="hasRole('ROLE_USER')"></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -34,13 +34,14 @@
 							<td th:text="${tipoParametroPersonaEntity.observacion}"></td>
 							<td th:text="${tipoParametroPersonaEntity.fechaCreacion}"></td>
 							<td th:text="${tipoParametroPersonaEntity.estado}"></td>
-							<td sec:authorize="hasRole('ROLE_USER')"><a class="btn btn-primary btn-xs" 
-							th:href="@{/tipoParametroPersona/listParametroPersona/} + ${tipoParametroPersonaEntity.tipoParametroPersona}" th:text="'Parámetros'"></a></td>
 							<td sec:authorize="hasRole('ROLE_ADMIN')">
 								<a class="btn btn-primary btn-xs" th:href="@{/tipoParametroPersona/formTipoParametroPersona/} + ${tipoParametroPersonaEntity.tipoParametroPersona}" th:text="'Editar'"></a>
 							</td>
 							<td sec:authorize="hasRole('ROLE_ADMIN')">
 								<a class="btn btn-danger btn-xs" th:href="@{/eliminarTipoParametroPersona/} + ${tipoParametroPersonaEntity.tipoParametroPersona}" th:text="'Eliminar'" onclick="return confirm('Estas seguro que quieres eliminar?');"></a>
+							</td>
+							<td sec:authorize="hasRole('ROLE_USER')">
+								<a class="btn btn-primary btn-xs" th:href="@{/tipoParametroPersona/listParametroPersona/} + ${tipoParametroPersonaEntity.tipoParametroPersona}" th:text="'Parámetros'"></a>
 							</td>
 						</tr>
 					</tbody>
