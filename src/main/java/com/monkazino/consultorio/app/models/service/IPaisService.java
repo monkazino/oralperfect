@@ -9,20 +9,20 @@ import com.monkazino.consultorio.app.models.entity.PaisEntity;
 
 public interface IPaisService {
 
+	public void save(PaisEntity paisEntity);
+	
+	public void delete(Long pais);
+	
+	public PaisEntity findOne(Long pais);
+	
 	public List<PaisEntity> findAll();
 	
 	public Page<PaisEntity> findAll(Pageable pageable);
 
-	public void save(PaisEntity paisEntity);
-	
-	public PaisEntity findOne(Long pais);
-	
-	public void delete(Long departamento);
-	
-	public PaisEntity fetchByIdWithDepartamentos(Long pais);
-	
 	public int consultarCountPaisByCodigo(String codigo);
 	
 	public int consultarCountPaisByCodigoPais(String codigo, Long pais);
 
+	public PaisEntity fetchByIdWithDepartamentos(Long pais);
+	
 }

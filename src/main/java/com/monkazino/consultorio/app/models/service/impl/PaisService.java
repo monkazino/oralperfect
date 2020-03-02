@@ -33,14 +33,14 @@ public class PaisService implements IPaisService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public PaisEntity findOne(Long departamento) {
-		return paisDao.findById(departamento).orElse(null);
+	public PaisEntity findOne(Long pais) {
+		return paisDao.findById(pais).orElse(null);
 	}
 	
 	@Override
 	@Transactional
-	public void delete(Long departamento) {
-		paisDao.deleteById(departamento);
+	public void delete(Long pais) {
+		paisDao.deleteById(pais);
 
 	}
 

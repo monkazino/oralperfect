@@ -32,14 +32,14 @@ public class PacienteService implements IPacienteService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public PacienteEntity findOne(Long id) {
-		return pacienteDao.findById(id).orElse(null);
+	public PacienteEntity findOne(Long paciente) {
+		return pacienteDao.findById(paciente).orElse(null);
 	}
 	
 	@Override
 	@Transactional
-	public void delete(Long id) {
-		pacienteDao.deleteById(id);
+	public void delete(Long paciente) {
+		pacienteDao.deleteById(paciente);
 
 	}
 

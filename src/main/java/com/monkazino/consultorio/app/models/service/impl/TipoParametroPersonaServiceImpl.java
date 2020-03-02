@@ -33,14 +33,14 @@ public class TipoParametroPersonaServiceImpl implements ITipoParametroPersonaSer
 
 	@Override
 	@Transactional(readOnly = true)
-	public TipoParametroPersonaEntity findOne(Long id) {
-		return tipoParametroPersonaDao.findById(id).orElse(null);
+	public TipoParametroPersonaEntity findOne(Long tipoParametroPersona) {
+		return tipoParametroPersonaDao.findById(tipoParametroPersona).orElse(null);
 	}
 	
 	@Override
 	@Transactional
-	public void delete(Long id) {
-		tipoParametroPersonaDao.deleteById(id);
+	public void delete(Long tipoParametroPersona) {
+		tipoParametroPersonaDao.deleteById(tipoParametroPersona);
 
 	}
 

@@ -9,16 +9,16 @@ import com.monkazino.consultorio.app.models.entity.ParametroPersonaEntity;
 
 public interface IParametroPersonaService {
 
+	public void save(ParametroPersonaEntity parametroPersonaEntity);
+	
+	public void delete(Long parametroPersona);
+	
+	public ParametroPersonaEntity findOne(Long parametroPersona);
+	
 	public List<ParametroPersonaEntity> findAll();
 	
 	public Page<ParametroPersonaEntity> findAll(Pageable pageable);
 
-	public void save(ParametroPersonaEntity parametroPersonaEntity);
-	
-	public ParametroPersonaEntity findOne(Long parametroPersona);
-	
-	public void delete(Long parametroPersona);
-	
 	public List<ParametroPersonaEntity> consultarParametrosPersonaTipoParametroPersona(String codigoTipoParametroPersona);
 
 	public int consultarCountParametroPersonaByCodigoTipoParametroPersona(String codigo, Long tipoParametroPersona);

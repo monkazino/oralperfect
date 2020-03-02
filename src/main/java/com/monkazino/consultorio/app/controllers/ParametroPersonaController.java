@@ -76,11 +76,11 @@ public class ParametroPersonaController {
 			parametroPersonaEntity = parametroPersonaService.findOne(parametroPersona);
 			if (parametroPersonaEntity == null) {
 				flash.addFlashAttribute("error", "El ID del parametro persona no existe en la BBDD!");
-				return "redirectparametroPersona/listarParametroPersona";
+				return "redirectparametroPersona/listParametroPersona";
 			}
 		} else {
 			flash.addFlashAttribute("error", "El ID del parametro persona no puede ser cero!");
-			return "redirect:/parametroPersona/listarParametroPersona";
+			return "redirect:/parametroPersona/listParametroPersona";
 		}
 		model.put("parametroPersonaEntity", parametroPersonaEntity);
 		model.put("lblTituloFormularioParametroPersona", "Parametro Persona");
@@ -135,8 +135,8 @@ public class ParametroPersonaController {
 		return "redirect:/tipoParametroPersona/listParametroPersona/" + tipoParametroPersona;
 	}
 	
-	@RequestMapping(value = {"/parametroPersona/listarParametroPersona"}, method = RequestMethod.GET)
-	public String listarParametroPersona(@RequestParam(name = "page", defaultValue = "0") int page, Model model,
+	@RequestMapping(value = {"/parametroPersona/listParametroPersona"}, method = RequestMethod.GET)
+	public String listParametroPersona(@RequestParam(name = "page", defaultValue = "0") int page, Model model,
 			Authentication authentication,
 			HttpServletRequest request) {
 
@@ -174,11 +174,11 @@ public class ParametroPersonaController {
 
 		Page<ParametroPersonaEntity> parametrosPersona = parametroPersonaService.findAll(pageRequest);
 
-		PageRender<ParametroPersonaEntity> pageRender = new PageRender<ParametroPersonaEntity>("/parametroPersona/listarParametroPersona", parametrosPersona);
+		PageRender<ParametroPersonaEntity> pageRender = new PageRender<ParametroPersonaEntity>("/parametroPersona/listParametroPersona", parametrosPersona);
 		model.addAttribute("titulo", "Listado de parametros persona");
 		model.addAttribute("parametrosPersona", parametrosPersona);
 		model.addAttribute("page", pageRender);
-		return "parametroPersona/listarParametroPersona";
+		return "parametroPersona/listParametroPersona";
 	}
 	
 	private boolean hasRole(String role) {

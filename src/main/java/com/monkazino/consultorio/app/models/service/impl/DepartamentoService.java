@@ -33,14 +33,14 @@ public class DepartamentoService implements IDepartamentoService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public DepartamentoEntity findOne(Long id) {
-		return departamentoDao.findById(id).orElse(null);
+	public DepartamentoEntity findOne(Long departamento) {
+		return departamentoDao.findById(departamento).orElse(null);
 	}
 	
 	@Override
 	@Transactional
-	public void delete(Long id) {
-		departamentoDao.deleteById(id);
+	public void delete(Long departamento) {
+		departamentoDao.deleteById(departamento);
 
 	}
 

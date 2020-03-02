@@ -33,14 +33,13 @@ public class LocalidadService implements ILocalidadService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public LocalidadEntity findOne(Long id) {
-		return localidadDao.findById(id).orElse(null);
+	public LocalidadEntity findOne(Long localidad) {
+		return localidadDao.findById(localidad).orElse(null);
 	}
 	
 	@Override
 	@Transactional
-	public void delete(Long id) {
-		localidadDao.deleteById(id);
+	public void delete(Long localidad) {
 
 	}
 

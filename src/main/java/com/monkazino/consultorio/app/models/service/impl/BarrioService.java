@@ -33,14 +33,14 @@ public class BarrioService implements IBarrioService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public BarrioEntity findOne(Long id) {
-		return barrioDao.findById(id).orElse(null);
+	public BarrioEntity findOne(Long barrio) {
+		return barrioDao.findById(barrio).orElse(null);
 	}
 	
 	@Override
 	@Transactional
-	public void delete(Long id) {
-		barrioDao.deleteById(id);
+	public void delete(Long barrio) {
+		barrioDao.deleteById(barrio);
 
 	}
 

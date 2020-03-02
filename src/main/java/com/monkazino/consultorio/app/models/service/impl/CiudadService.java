@@ -33,14 +33,14 @@ public class CiudadService implements ICiudadService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public CiudadEntity findOne(Long id) {
-		return ciudadDao.findById(id).orElse(null);
+	public CiudadEntity findOne(Long ciudad) {
+		return ciudadDao.findById(ciudad).orElse(null);
 	}
 	
 	@Override
 	@Transactional
-	public void delete(Long id) {
-		ciudadDao.deleteById(id);
+	public void delete(Long ciudad) {
+		ciudadDao.deleteById(ciudad);
 
 	}
 

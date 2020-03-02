@@ -34,14 +34,14 @@ public class ParametroPersonaService implements IParametroPersonaService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public ParametroPersonaEntity findOne(Long id) {
-		return parametroPersonaDao.findById(id).orElse(null);
+	public ParametroPersonaEntity findOne(Long parametroPersona) {
+		return parametroPersonaDao.findById(parametroPersona).orElse(null);
 	}
 	
 	@Override
 	@Transactional
-	public void delete(Long id) {
-		parametroPersonaDao.deleteById(id);
+	public void delete(Long parametroPersona) {
+		parametroPersonaDao.deleteById(parametroPersona);
 
 	}
 

@@ -120,8 +120,8 @@ public class LocalidadController {
 	
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@GetMapping(value = "/parametrizacionGeografica/listBarriosLocalidad/{id}")
-	public String listBarriosLocalidad(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
-		LocalidadEntity localidadEntity = localidadService.fetchByIdWithBarrios(id);
+	public String listBarriosLocalidad(@PathVariable(value = "localidad") Long localidad, Map<String, Object> model, RedirectAttributes flash) {
+		LocalidadEntity localidadEntity = localidadService.fetchByIdWithBarrios(localidad);
 		if (localidadEntity == null) {
 			flash.addFlashAttribute("error", "La localidad no existe en la base de datos");
 			return "redirect:/parametrizacionGeografica/listBarriosLocalidad";

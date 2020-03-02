@@ -9,14 +9,14 @@ import com.monkazino.consultorio.app.models.entity.PacienteEntity;
 
 public interface IPacienteService {
 
+	public void save(PacienteEntity pacienteEntity);
+	
+	public void delete(Long paciente);
+	
+	public PacienteEntity findOne(Long paciente);
+
 	public List<PacienteEntity> findAll();
 	
 	public Page<PacienteEntity> findAll(Pageable pageable);
-
-	public void save(PacienteEntity pacienteEntity);
-	
-	public PacienteEntity findOne(Long id);
-	
-	public void delete(Long id);
 	
 }
