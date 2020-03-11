@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.monkazino.consultorio.app.models.dao.IProductoDao;
+import com.monkazino.consultorio.app.models.entity.DocumentoInventarioEntity;
 import com.monkazino.consultorio.app.models.entity.ProductoEntity;
 import com.monkazino.consultorio.app.models.service.IProductoService;
 
@@ -17,6 +18,24 @@ public class ProductoService implements IProductoService {
 
 	@Autowired
 	private IProductoDao productoDao;
+	
+	@Override
+	@Transactional
+	public void save(ProductoEntity productoEntity) {
+		productoDao.save(productoEntity);
+	}
+
+	@Override
+	@Transactional
+	public void delete(Long producto) {
+		productoDao.deleteById(producto);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public ProductoEntity findOne(Long producto) {
+		return productoDao.findById(producto).orElse(null);
+	}
 	
 	@Override
 	@Transactional(readOnly = true)
@@ -31,25 +50,6 @@ public class ProductoService implements IProductoService {
 	}
 	
 	@Override
-	@Transactional
-	public void save(ProductoEntity productoEntity) {
-		productoDao.save(productoEntity);
-	}
-
-	@Override
-	@Transactional(readOnly = true)
-	public ProductoEntity findOne(Long producto) {
-		return productoDao.findById(producto).orElse(null);
-	}
-	
-	@Override
-	@Transactional
-	public void delete(Long producto) {
-		productoDao.deleteById(producto);
-
-	}
-
-	@Override
 	@Transactional(readOnly = true)
 	public int consultarCountProductoByCodigo(String codigo) {
 		return productoDao.consultarCountProductoByCodigo(codigo);
@@ -60,4 +60,17 @@ public class ProductoService implements IProductoService {
 	public int consultarCountProductoByCodigoProducto(String codigo, Long producto) {
 		return productoDao.consultarCountProductoByCodigoProducto(codigo, producto);
 	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public List<ProductoEntity> findByNombre(String term) {
+		return productoDao.findByNombre("%" + term + "%");
+	}
+
+	@Override
+	@Transactional(readOnly=true)
+	public List<ProductoEntity> fetchByDescripcionLike(String term) {
+		return productoDao.fetchByDescripcionLike(term);
+	}
+
 }

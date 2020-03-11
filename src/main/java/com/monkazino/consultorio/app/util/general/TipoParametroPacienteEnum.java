@@ -1,6 +1,6 @@
 package com.monkazino.consultorio.app.util.general;
 
-public enum ParametroPacienteEnum {
+public enum TipoParametroPacienteEnum {
 	
 	TIPO_IDENTIFICACION ("TIPIDENT"),
 	GENERO("GENERO"),
@@ -12,7 +12,7 @@ public enum ParametroPacienteEnum {
 	
 	private String codigo;
 	
-	private ParametroPacienteEnum (String codigo) {
+	private TipoParametroPacienteEnum (String codigo) {
 		this.codigo = codigo;
 	}
 

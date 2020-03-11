@@ -18,16 +18,22 @@ public class ProveedorService implements IProveedorService {
 	private IProveedorDao proveedorDao;
 	
 	@Override
-	@Transactional(readOnly = true)
-	public List<ProveedorEntity> findAll() {
-		return (List<ProveedorEntity>) proveedorDao.findAll();
+	@Transactional
+	public void save(ProveedorEntity proveedorEntity) {
+		proveedorDao.save(proveedorEntity);
 	}
 
 	@Override
 	@Transactional
-	public void save(ProveedorEntity proveedorEntity) {
-		proveedorDao.save(proveedorEntity);
+	public void delete(Long proveedor) {
+		proveedorDao.deleteById(proveedor);
 
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public List<ProveedorEntity> findAll() {
+		return (List<ProveedorEntity>) proveedorDao.findAll();
 	}
 
 	@Override
@@ -35,18 +41,18 @@ public class ProveedorService implements IProveedorService {
 	public ProveedorEntity findOne(Long proveedor) {
 		return proveedorDao.findById(proveedor).orElse(null);
 	}
-	
-	@Override
-	@Transactional
-	public void delete(Long proveedor) {
-		proveedorDao.deleteById(proveedor);
-
-	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public Page<ProveedorEntity> findAll(Pageable pageable) {
 		return proveedorDao.findAll(pageable);
 	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public ProveedorEntity fetchByIdWithDocumentosInventario(Long proveedor) {
+		return proveedorDao.fetchByIdWithDocumentosInventario(proveedor);
+	}
+
 	
 }

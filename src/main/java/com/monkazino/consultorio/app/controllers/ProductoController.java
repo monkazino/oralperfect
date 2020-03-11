@@ -1,6 +1,8 @@
 package com.monkazino.consultorio.app.controllers;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,9 +33,12 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.monkazino.consultorio.app.models.entity.ParametroProductoEntity;
 import com.monkazino.consultorio.app.models.entity.ProductoEntity;
+import com.monkazino.consultorio.app.models.service.IParametroProductoService;
 import com.monkazino.consultorio.app.models.service.IProductoService;
 import com.monkazino.consultorio.app.util.general.EstadoActivoInactivoEnum;
+import com.monkazino.consultorio.app.util.general.TipoParametroProductoEnum;
 import com.monkazino.consultorio.app.util.paginator.PageRender;
 
 @Controller
@@ -44,13 +49,24 @@ public class ProductoController {
 
 	@Autowired
 	private IProductoService productoService;
+	
+	@Autowired
+	private IParametroProductoService parametroProductoService;
+	
+	private List<ParametroProductoEntity> listaParamTipoProducto;
+	private List<ParametroProductoEntity> listaParamMarca;
+	private List<ParametroProductoEntity> listaParamCategoria;
 
 	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/producto/formProducto")
 	public String crearProducto(Map<String, Object> model) {
+		inicializarParametrosTipoProducto();
 		ProductoEntity productoEntity = new ProductoEntity();
 		productoEntity.setEstado(EstadoActivoInactivoEnum.ACTIVO.getCodigo());
 		model.put("productoEntity", productoEntity);
+		model.put("listaParamTipoProducto", listaParamTipoProducto);
+		model.put("listaParamMarca", listaParamMarca);
+		model.put("listaParamCategoria", listaParamCategoria);
 		model.put("lblTituloFormProducto", "Producto");
 		return "producto/formProducto";
 	}
@@ -70,6 +86,9 @@ public class ProductoController {
 			return "redirect:/producto/listProducto";
 		}
 		model.put("productoEntity", productoEntity);
+		model.put("listaParamTipoProducto", listaParamTipoProducto);
+		model.put("listaParamMarca", listaParamMarca);
+		model.put("listaParamCategoria", listaParamCategoria);
 		model.put("lblTituloFormProducto", "Producto");
 		return "producto/formProducto";
 	}
@@ -79,6 +98,9 @@ public class ProductoController {
 	public String guardarProducto(@Valid ProductoEntity productoEntity, BindingResult result, Map<String, Object> model, RedirectAttributes flash, SessionStatus status) {
 		int countProductoCodigo = 0;
 		if (result.hasErrors()) {
+			model.put("listaParamTipoProducto", listaParamTipoProducto);
+			model.put("listaParamMarca", listaParamMarca);
+			model.put("listaParamCategoria", listaParamCategoria);
 			return "producto/formProducto";
 		}
 		if (productoEntity.getProducto() == null) {
@@ -159,6 +181,43 @@ public class ProductoController {
 		model.addAttribute("page", pageRender);
 		return "producto/listProducto";
 	}
+	
+	public void inicializarParametrosTipoProducto() {
+		listaParamTipoProducto= new ArrayList<ParametroProductoEntity>();
+		listaParamTipoProducto = parametroProductoService.consultarParametrosProductoTipoParametroProducto(TipoParametroProductoEnum.TIPO_PRODUCTO.getCodigo());
+		
+		listaParamMarca= new ArrayList<ParametroProductoEntity>();
+		listaParamMarca = parametroProductoService.consultarParametrosProductoTipoParametroProducto(TipoParametroProductoEnum.MARCA.getCodigo());
+		
+		listaParamCategoria= new ArrayList<ParametroProductoEntity>();
+		listaParamCategoria = parametroProductoService.consultarParametrosProductoTipoParametroProducto(TipoParametroProductoEnum.CATEGORIA.getCodigo());
+	}
+	
+	public List<ParametroProductoEntity> getListaParamTipoProducto() {
+		return listaParamTipoProducto;
+	}
+
+	public void setListaParamTipoProducto(List<ParametroProductoEntity> listaParamTipoProducto) {
+		this.listaParamTipoProducto = listaParamTipoProducto;
+	}
+
+	public List<ParametroProductoEntity> getListaParamMarca() {
+		return listaParamMarca;
+	}
+
+	public void setListaParamMarca(List<ParametroProductoEntity> listaParamMarca) {
+		this.listaParamMarca = listaParamMarca;
+	}
+
+	public List<ParametroProductoEntity> getListaParamCategoria() {
+		return listaParamCategoria;
+	}
+
+	public void setListaParamCategoria(List<ParametroProductoEntity> listaParamCategoria) {
+		this.listaParamCategoria = listaParamCategoria;
+	}
+
+	
 	
 	private boolean hasRole(String role) {
 		

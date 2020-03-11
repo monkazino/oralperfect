@@ -19,4 +19,6 @@ public interface IProveedorService {
 	
 	public Page<ProveedorEntity> findAll(Pageable pageable);
 	
+	public ProveedorEntity fetchByIdWithDocumentosInventario(Long proveedor);
+	
 }

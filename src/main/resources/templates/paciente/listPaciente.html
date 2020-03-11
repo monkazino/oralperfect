@@ -32,7 +32,7 @@
 					<tbody>
 						<tr th:each="pacienteEntity: ${pacientes}">
 							<td sec:authorize="hasRole('ROLE_USER')"><a class="btn btn-primary btn-xs" 
-							th:href="@{/paciente/verPaciente/} + ${pacienteEntity.paciente}" th:text="${pacienteEntity.paciente}"></a></td>
+							th:href="@{/paciente/verInformacionPaciente/} + ${pacienteEntity.paciente}" th:text="${pacienteEntity.paciente}"></a></td>
 							<td th:text="${pacienteEntity.paramTipoIdentificacion.descripcion}"></td>
 							<td th:text="${pacienteEntity.numeroIdentificacion}"></td>
 							<td th:text="${pacienteEntity.primerNombre}"></td>

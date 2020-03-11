@@ -17,6 +17,7 @@
 						<tr>
 							<th>Código</th>
 							<th>Descripción</th>
+							<th>Precio</th>
 							<th sec:authorize="hasRole('ROLE_ADMIN')">Editar</th>
 							<th sec:authorize="hasRole('ROLE_ADMIN')">Eliminar</th>
 							<th sec:authorize="hasRole('ROLE_USER')"></th>
@@ -26,6 +27,7 @@
 						<tr th:each="productoEntity: ${productos}">
 							<td th:text="${productoEntity.codigo}"></td>
 							<td th:text="${productoEntity.descripcion}"></td>
+							<td th:text="${productoEntity.precio}"></td>
 							<td sec:authorize="hasRole('ROLE_ADMIN')">
 								<a class="btn btn-primary btn-xs" th:href="@{/producto/formProducto/} + ${productoEntity.producto}" th:text="'Editar'"></a>
 							</td>

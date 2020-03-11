@@ -46,10 +46,10 @@ public class ProveedorController {
 	private IProveedorService proveedorService;
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@GetMapping(value = "/proveedor/verProveedor/{id}")
-	public String verProveedor(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
+	@GetMapping(value = "/proveedor/verInformacionProveedor/{proveedor}")
+	public String verInformacionProveedor(@PathVariable(value = "proveedor") Long proveedor, Map<String, Object> model, RedirectAttributes flash) {
 
-		ProveedorEntity proveedorEntity = proveedorService.findOne(id);
+		ProveedorEntity proveedorEntity = proveedorService.fetchByIdWithDocumentosInventario(proveedor);
 		if (proveedorEntity == null) {
 			flash.addFlashAttribute("error", "El proveedor no existe en la base de datos");
 			return "redirect:/proveedor/listProveedor";
@@ -57,7 +57,7 @@ public class ProveedorController {
 
 		model.put("proveedorEntity", proveedorEntity);
 		model.put("lblTituloDetalleProveedor", "Detalle proveedor: " + proveedorEntity.getRazonSocial());
-		return "proveedor/verProveedor";
+		return "proveedor/verInformacionProveedor";
 	}
 
 	@RequestMapping(value = {"/proveedor/listProveedor"}, method = RequestMethod.GET)

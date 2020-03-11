@@ -39,7 +39,7 @@ import com.monkazino.consultorio.app.models.entity.ParametroPersonaEntity;
 import com.monkazino.consultorio.app.models.service.IPacienteService;
 import com.monkazino.consultorio.app.models.service.IParametroPersonaService;
 import com.monkazino.consultorio.app.util.general.EstadoPacienteEnum;
-import com.monkazino.consultorio.app.util.general.ParametroPacienteEnum;
+import com.monkazino.consultorio.app.util.general.TipoParametroPacienteEnum;
 import com.monkazino.consultorio.app.util.paginator.PageRender;
 
 @Controller
@@ -63,8 +63,8 @@ public class PacienteController {
 	private List<ParametroPersonaEntity> listaParamOcupacion;
 	
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@GetMapping(value = "/paciente/verPaciente/{id}")
-	public String verPaciente(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
+	@GetMapping(value = "/paciente/verInformacionPaciente/{id}")
+	public String verInformacionPaciente(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
 
 		PacienteEntity pacienteEntity = pacienteService.findOne(id);
 		if (pacienteEntity == null) {
@@ -74,7 +74,7 @@ public class PacienteController {
 
 		model.put("pacienteEntity", pacienteEntity);
 		model.put("lblTituloDetallePaciente", "Detalle paciente: " + pacienteEntity.getPrimerNombre() + " " + pacienteEntity.getSegundoNombre() + " " + pacienteEntity.getPrimerApellido() + " " + pacienteEntity.getSegundoApellido());
-		return "paciente/verPaciente";
+		return "paciente/verInformacionPaciente";
 	}
 
 	@RequestMapping(value = {"/paciente/listPaciente"}, method = RequestMethod.GET)
@@ -125,25 +125,25 @@ public class PacienteController {
 
 	public void inicializarParametrosPersona() {
 		listaParamTipoIdentificacion = new ArrayList<ParametroPersonaEntity>();
-		listaParamTipoIdentificacion = parametroPersonaService.consultarParametrosPersonaTipoParametroPersona(ParametroPacienteEnum.TIPO_IDENTIFICACION.getCodigo());
+		listaParamTipoIdentificacion = parametroPersonaService.consultarParametrosPersonaTipoParametroPersona(TipoParametroPacienteEnum.TIPO_IDENTIFICACION.getCodigo());
 		
 		listaParamGenero = new ArrayList<ParametroPersonaEntity>();
-		listaParamGenero = parametroPersonaService.consultarParametrosPersonaTipoParametroPersona(ParametroPacienteEnum.GENERO.getCodigo());
+		listaParamGenero = parametroPersonaService.consultarParametrosPersonaTipoParametroPersona(TipoParametroPacienteEnum.GENERO.getCodigo());
 		
 		listaParamEstadoCivil = new ArrayList<ParametroPersonaEntity>();
-		listaParamEstadoCivil = parametroPersonaService.consultarParametrosPersonaTipoParametroPersona(ParametroPacienteEnum.ESTADO_CIVIL.getCodigo());
+		listaParamEstadoCivil = parametroPersonaService.consultarParametrosPersonaTipoParametroPersona(TipoParametroPacienteEnum.ESTADO_CIVIL.getCodigo());
 		
 		listaParamGrupoSanguineo = new ArrayList<ParametroPersonaEntity>();
-		listaParamGrupoSanguineo = parametroPersonaService.consultarParametrosPersonaTipoParametroPersona(ParametroPacienteEnum.GRUPO_SANGUINEO.getCodigo());
+		listaParamGrupoSanguineo = parametroPersonaService.consultarParametrosPersonaTipoParametroPersona(TipoParametroPacienteEnum.GRUPO_SANGUINEO.getCodigo());
 		
 		listaParamNivelAcademico = new ArrayList<ParametroPersonaEntity>();
-		listaParamNivelAcademico = parametroPersonaService.consultarParametrosPersonaTipoParametroPersona(ParametroPacienteEnum.NIVEL_ACADEMICO.getCodigo());
+		listaParamNivelAcademico = parametroPersonaService.consultarParametrosPersonaTipoParametroPersona(TipoParametroPacienteEnum.NIVEL_ACADEMICO.getCodigo());
 		
 		listaParamRaza = new ArrayList<ParametroPersonaEntity>();
-		listaParamRaza = parametroPersonaService.consultarParametrosPersonaTipoParametroPersona(ParametroPacienteEnum.RAZA.getCodigo());
+		listaParamRaza = parametroPersonaService.consultarParametrosPersonaTipoParametroPersona(TipoParametroPacienteEnum.RAZA.getCodigo());
 		
 		listaParamOcupacion = new ArrayList<ParametroPersonaEntity>();
-		listaParamOcupacion = parametroPersonaService.consultarParametrosPersonaTipoParametroPersona(ParametroPacienteEnum.OCUPACION.getCodigo());
+		listaParamOcupacion = parametroPersonaService.consultarParametrosPersonaTipoParametroPersona(TipoParametroPacienteEnum.OCUPACION.getCodigo());
 	}
 
 	@Secured("ROLE_ADMIN")
@@ -216,8 +216,7 @@ public class PacienteController {
 
 	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/paciente/formPaciente", method = RequestMethod.POST)
-	public String guardarPaciente(@Valid PacienteEntity pacienteEntity, BindingResult result, Model model,
-			RedirectAttributes flash, SessionStatus status) {
+	public String guardarPaciente(@Valid PacienteEntity pacienteEntity, BindingResult result, Model model, RedirectAttributes flash, SessionStatus status) {
 
 		if (result.hasErrors()) {
 			model.addAttribute("lblTituloFormularioPaciente", "Paciente");

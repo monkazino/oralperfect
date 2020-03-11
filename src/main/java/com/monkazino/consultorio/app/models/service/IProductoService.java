@@ -9,7 +9,7 @@ import com.monkazino.consultorio.app.models.entity.ProductoEntity;
 
 public interface IProductoService {
 
-public void save(ProductoEntity productoEntity);
+	public void save(ProductoEntity productoEntity);
 	
 	public void delete(Long producto);
 	
@@ -22,5 +22,8 @@ public void save(ProductoEntity productoEntity);
 	public int consultarCountProductoByCodigo(String codigo);
 	
 	public int consultarCountProductoByCodigoProducto(String codigo, Long producto);
-
+	
+	public List<ProductoEntity> findByNombre(String term);
+	
+	public List<ProductoEntity> fetchByDescripcionLike(String term);
 }
