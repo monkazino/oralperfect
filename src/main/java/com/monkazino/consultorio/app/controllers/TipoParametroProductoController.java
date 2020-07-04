@@ -33,9 +33,10 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.monkazino.consultorio.app.general.enums.EstadoActivoInactivoEnum;
+import com.monkazino.consultorio.app.general.util.ListaOpcionesEnumeradores;
 import com.monkazino.consultorio.app.models.entity.TipoParametroProductoEntity;
 import com.monkazino.consultorio.app.models.service.ITipoParametroProductoService;
-import com.monkazino.consultorio.app.util.general.EstadoActivoInactivoEnum;
 import com.monkazino.consultorio.app.util.paginator.PageRender;
 
 @Controller
@@ -46,43 +47,49 @@ public class TipoParametroProductoController {
 
 	@Autowired
 	private ITipoParametroProductoService tipoParametroProductoService;
+	private Map<String, String> listEstado;
 
 	@Secured("ROLE_ADMIN")
-	@RequestMapping(value = "/tipoParametroProducto/formTipoParametroProducto")
+	@RequestMapping(value = "/parametrizacionSistema/tipoParametroProducto/formTipoParametroProducto")
 	public String crearTipoParametroProducto(Map<String, Object> model) {
 		TipoParametroProductoEntity tipoParametroProductoEntity = new TipoParametroProductoEntity();
 		tipoParametroProductoEntity.setFechaCreacion(new Date());
 		tipoParametroProductoEntity.setEstado(EstadoActivoInactivoEnum.ACTIVO.getCodigo());
+		inicializarVariablesTipoParametroProducto();
 		model.put("tipoParametroProductoEntity", tipoParametroProductoEntity);
+		model.put("listEstado", listEstado);
 		model.put("lblTituloFormularioTipoParametroProducto", "Tipo Parametro Producto");
-		return "tipoParametroProducto/formTipoParametroProducto";
+		return "parametrizacionSistema/tipoParametroProducto/formTipoParametroProducto";
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping(value = "/tipoParametroProducto/formTipoParametroProducto/{tipoParametroProducto}")
+	@RequestMapping(value = "/parametrizacionSistema/tipoParametroProducto/formTipoParametroProducto/{tipoParametroProducto}")
 	public String editarTipoParametroProducto(@PathVariable(value = "tipoParametroProducto") Long tipoParametroProducto, Map<String, Object> model, RedirectAttributes flash) {
 		TipoParametroProductoEntity tipoParametroProductoEntity = null;
 		if (tipoParametroProducto > 0) {
 			tipoParametroProductoEntity = tipoParametroProductoService.findOne(tipoParametroProducto);
 			if (tipoParametroProductoEntity == null) {
 				flash.addFlashAttribute("error", "El ID del tipo parametro producto no existe en la BBDD!");
-				return "redirect:/tipoParametroProducto/listTipoParametroProducto";
+				return "redirect:/parametrizacionSistema/tipoParametroProducto/listTipoParametroProducto";
 			}
 		} else {
 			flash.addFlashAttribute("error", "El ID del tipo parametro producto no puede ser cero!");
-			return "redirect:/tipoParametroProducto/listTipoParametroProducto";
+			return "redirect:/parametrizacionSistema/tipoParametroProducto/listTipoParametroProducto";
 		}
+		inicializarVariablesTipoParametroProducto();
 		model.put("tipoParametroProductoEntity", tipoParametroProductoEntity);
+		model.put("listEstado", listEstado);
 		model.put("lblTituloFormularioTipoParametroProducto", "Tipo Parametro Producto");
-		return "tipoParametroProducto/formTipoParametroProducto";
+		return "parametrizacionSistema/tipoParametroProducto/formTipoParametroProducto";
 	}
 
 	@Secured("ROLE_ADMIN")
-	@RequestMapping(value = "/tipoParametroProducto/formTipoParametroProducto", method = RequestMethod.POST)
+	@RequestMapping(value = "/parametrizacionSistema/tipoParametroProducto/formTipoParametroProducto", method = RequestMethod.POST)
 	public String guardarTipoParametroProducto(@Valid TipoParametroProductoEntity tipoParametroProductoEntity, BindingResult result, Map<String, Object> model, RedirectAttributes flash, SessionStatus status) {
 		int countTipoParametroProductoCodigo = 0;
 		if (result.hasErrors()) {
-			return "tipoParametroProducto/formTipoParametroProducto";
+			model.put("listEstado", listEstado);
+			return "parametrizacionSistema/tipoParametroProducto/formTipoParametroProducto";
 		}
 		if (tipoParametroProductoEntity.getTipoParametroProducto() == null) {
 			countTipoParametroProductoCodigo = tipoParametroProductoService.consultarCountTipoParametroProductoByCodigo(tipoParametroProductoEntity.getCodigo().toUpperCase());
@@ -98,7 +105,7 @@ public class TipoParametroProductoController {
 			return "redirect:listTipoParametroProducto";
 		} else {
 			model.put("mensajeErrorTipoParametroProducto", "El código ya se encuentra registrado");
-			return "tipoParametroProducto/formTipoParametroProducto";
+			return "parametrizacionSistema/tipoParametroProducto/formTipoParametroProducto";
 		}
 	}
 
@@ -116,23 +123,23 @@ public class TipoParametroProductoController {
 				flash.addFlashAttribute("success", "Tipo Parametro Producto no se puede eliminar, tiene asociado parametros");
 			}
 		}
-		return "redirect:/tipoParametroProducto/listTipoParametroProducto";
+		return "redirect:/parametrizacionSistema/tipoParametroProducto/listTipoParametroProducto";
 	}
 	
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@GetMapping(value = "/tipoParametroProducto/listParametroProducto/{parametroProducto}")
+	@GetMapping(value = "/parametrizacionSistema/tipoParametroProducto/listParametroProducto/{parametroProducto}")
 	public String listParametroProducto(@PathVariable(value = "parametroProducto") Long parametroProducto, Map<String, Object> model, RedirectAttributes flash) {
 		TipoParametroProductoEntity tipoParametroProductoEntity = tipoParametroProductoService.fetchByIdWithParametrosProducto(parametroProducto);
 		if (tipoParametroProductoEntity == null) {
 			flash.addFlashAttribute("error", "El tipo parametro producto no existe en la base de datos");
-			return "redirect:/tipoParametroProducto/listTipoParametroProducto";
+			return "redirect:/parametrizacionSistema/tipoParametroProducto/listTipoParametroProducto";
 		}
 		model.put("tipoParametroProductoEntity", tipoParametroProductoEntity);
 		model.put("lblTituloDetalleTipoParametroProducto", "Detalle tipo parametro producto: " + tipoParametroProductoEntity.getDescripcion());
-		return "tipoParametroProducto/listParametroProducto";
+		return "parametrizacionSistema/tipoParametroProducto/listParametroProducto";
 	}
 
-	@RequestMapping(value = {"/tipoParametroProducto/listTipoParametroProducto"}, method = RequestMethod.GET)
+	@RequestMapping(value = {"/parametrizacionSistema/tipoParametroProducto/listTipoParametroProducto"}, method = RequestMethod.GET)
 	public String listTipoParametroProducto(@RequestParam(name = "page", defaultValue = "0") int page, Model model,
 			Authentication authentication,
 			HttpServletRequest request) {
@@ -169,14 +176,14 @@ public class TipoParametroProductoController {
 		
 		Pageable pageRequest = PageRequest.of(page, 4);
 
-		Page<TipoParametroProductoEntity> tipoParametrosProducto = tipoParametroProductoService.findAll(pageRequest);
+		Page<TipoParametroProductoEntity> listTipoParametroProductoEntity = tipoParametroProductoService.findAll(pageRequest);
 
-		PageRender<TipoParametroProductoEntity> pageRender = new PageRender<TipoParametroProductoEntity>("/tipoParametroProducto/listTipoParametroProducto", tipoParametrosProducto);
+		PageRender<TipoParametroProductoEntity> pageRender = new PageRender<TipoParametroProductoEntity>("/parametrizacionSistema/tipoParametroProducto/listTipoParametroProducto", listTipoParametroProductoEntity);
 		model.addAttribute("lblTituloAplicacion", "Monkazino Soft");
 		model.addAttribute("lblTituloListadoTipoParametroProducto", "Listado de tipo parametros producto");
-		model.addAttribute("tipoParametrosProducto", tipoParametrosProducto);
+		model.addAttribute("listTipoParametroProductoEntity", listTipoParametroProductoEntity);
 		model.addAttribute("page", pageRender);
-		return "tipoParametroProducto/listTipoParametroProducto";
+		return "parametrizacionSistema/tipoParametroProducto/listTipoParametroProducto";
 	}
 
 	private boolean hasRole(String role) {
@@ -208,5 +215,17 @@ public class TipoParametroProductoController {
 		return false;
 		*/
 		
+	}
+	
+	public Map<String, String> getListEstado() {
+		return listEstado;
+	}
+
+	public void setListEstado(Map<String, String> listEstado) {
+		this.listEstado = listEstado;
+	}
+
+	public void inicializarVariablesTipoParametroProducto() {
+		listEstado= ListaOpcionesEnumeradores.getListEstado();
 	}
 }

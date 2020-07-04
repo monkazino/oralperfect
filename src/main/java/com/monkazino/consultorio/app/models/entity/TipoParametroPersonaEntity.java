@@ -47,7 +47,7 @@ public class TipoParametroPersonaEntity implements Serializable {
 	
 	@NotNull
 	@Temporal(TemporalType.DATE)
-	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@DateTimeFormat(pattern="dd/MM/yyyy")
 	@Column(name = "FECHA_CREACION")
 	private Date fechaCreacion;
 	

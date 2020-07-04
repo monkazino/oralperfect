@@ -34,12 +34,12 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.monkazino.consultorio.app.general.enums.EstadoPacienteEnum;
+import com.monkazino.consultorio.app.general.enums.TipoParametroPacienteEnum;
 import com.monkazino.consultorio.app.models.entity.PacienteEntity;
 import com.monkazino.consultorio.app.models.entity.ParametroPersonaEntity;
 import com.monkazino.consultorio.app.models.service.IPacienteService;
 import com.monkazino.consultorio.app.models.service.IParametroPersonaService;
-import com.monkazino.consultorio.app.util.general.EstadoPacienteEnum;
-import com.monkazino.consultorio.app.util.general.TipoParametroPacienteEnum;
 import com.monkazino.consultorio.app.util.paginator.PageRender;
 
 @Controller
@@ -123,7 +123,7 @@ public class PacienteController {
 		return "paciente/listPaciente";
 	}
 
-	public void inicializarParametrosPersona() {
+	public void inicializarVariablesPaciente() {
 		listaParamTipoIdentificacion = new ArrayList<ParametroPersonaEntity>();
 		listaParamTipoIdentificacion = parametroPersonaService.consultarParametrosPersonaTipoParametroPersona(TipoParametroPacienteEnum.TIPO_IDENTIFICACION.getCodigo());
 		
@@ -149,7 +149,7 @@ public class PacienteController {
 	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/paciente/formPaciente")
 	public String crearPaciente(Map<String, Object> model) {
-		inicializarParametrosPersona();
+		inicializarVariablesPaciente();
 
 		PacienteEntity pacienteEntity = new PacienteEntity();
 		pacienteEntity.setEstado(EstadoPacienteEnum.ACTIVO.getCodigo());
@@ -169,7 +169,7 @@ public class PacienteController {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value = "/paciente/formPaciente/{id}")
 	public String editarPaciente(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
-		inicializarParametrosPersona();
+		inicializarVariablesPaciente();
 		PacienteEntity pacienteEntity = null;
 
 		if (id > 0) {
@@ -197,7 +197,7 @@ public class PacienteController {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value = "/paciente/formPacienteReferencia/{id}")
 	public String crearPacienteReferencia(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
-		inicializarParametrosPersona();
+		inicializarVariablesPaciente();
 		PacienteEntity pacienteEntity = null;
 
 		if (id > 0) {

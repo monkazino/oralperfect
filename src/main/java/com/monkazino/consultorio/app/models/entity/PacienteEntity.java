@@ -58,7 +58,7 @@ public class PacienteEntity implements Serializable {
 	
 	@NotNull
 	@Temporal(TemporalType.DATE)
-	@DateTimeFormat(pattern="dd-MM-yyyy")
+	@DateTimeFormat(pattern="dd/MM/yyyy")
 	@Column(name = "FECHA_NACIMIENTO")
 	private Date fechaNacimiento;
 	

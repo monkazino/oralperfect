@@ -1,5 +1,7 @@
 package com.monkazino.consultorio.app.controllers;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -25,13 +27,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.monkazino.consultorio.app.models.entity.DocumentoInventarioEntity;
 import com.monkazino.consultorio.app.models.entity.ItemInventarioEntity;
-import com.monkazino.consultorio.app.models.entity.PaisEntity;
+import com.monkazino.consultorio.app.models.entity.TipoDocumentoInventarioEntity;
 import com.monkazino.consultorio.app.models.entity.ProveedorEntity;
 import com.monkazino.consultorio.app.models.entity.ProductoEntity;
+import com.monkazino.consultorio.app.models.entity.BodegaEntity;
 import com.monkazino.consultorio.app.models.service.IDocumentoInventarioService;
+import com.monkazino.consultorio.app.models.service.ITipoDocumentoInventarioService;
 import com.monkazino.consultorio.app.models.service.IProductoService;
+import com.monkazino.consultorio.app.models.service.IBodegaService;
 import com.monkazino.consultorio.app.models.service.IProveedorService;
-import com.monkazino.consultorio.app.util.general.EstadoActivoInactivoEnum;
 
 @Controller
 @RequestMapping("/inventario")
@@ -49,21 +53,16 @@ public class DocumentoInventarioController {
 	@Autowired
 	private IProductoService productoService;
 	
-	@GetMapping("/verInformacionDocumentoInventario/{documentoInventario}")
-	public String verInformacionDocumentoInventario(@PathVariable(value="documentoInventario") Long documentoInventario, Model model, RedirectAttributes flash) {
-		DocumentoInventarioEntity documentoInventarioEntity = documentoInventarioService.fetchByIdWithProveedorEntityWhithItemDocumentoInventarioEntityWithProductoEntity(documentoInventario); //proveedorService.findDocumentoInventarioById(documentoInventario);
-		
-		if(documentoInventarioEntity == null) {
-			flash.addFlashAttribute("error", "El Documento Inventario no existe en la base de datos!");
-			return "redirect:/proveedor/listProveedor";
-		}
-		
-		model.addAttribute("documentoInventarioEntity", documentoInventarioEntity);
-		model.addAttribute("titulo", "Documento Inventario: ".concat(documentoInventarioEntity.getObservacion()));
-		
-		return "inventario/verInformacionDocumentoInventario";
-	}
-
+	@Autowired
+	private IBodegaService bodegaService;
+	
+	@Autowired
+	private ITipoDocumentoInventarioService tipoDocumentoInventarioService;
+	
+	private List<TipoDocumentoInventarioEntity> listTipoDocumentoInventario;
+	private List<BodegaEntity> listBodega;
+	
+	private String codigoBodega = "BOD01";
 	
 	@GetMapping("/formDocumentoInventario/{proveedor}")
 	public String crearDocumentoInventario(@PathVariable(value = "proveedor") Long proveedor, Map<String, Object> model, RedirectAttributes flash) {
@@ -72,9 +71,13 @@ public class DocumentoInventarioController {
 			flash.addFlashAttribute("error", "El proveedor no existe en la base de datos");
 			return "redirect:/proveedor/listProveedor";
 		}
+		inicializarVariablesDocumentoInventario();
 		DocumentoInventarioEntity documentoInventarioEntity = new DocumentoInventarioEntity();
+		documentoInventarioEntity.setFechaCreacion(new Date());
 		documentoInventarioEntity.setProveedorEntity(proveedorEntity);
 		model.put("documentoInventarioEntity", documentoInventarioEntity);
+		model.put("listTipoDocumentoInventario", listTipoDocumentoInventario);
+		model.put("listBodega", listBodega);
 		model.put("lblTituloFormDocumentoInventario", "Documento Inventario");
 		model.put("titulo", "Crear Documento Inventario");
 		return "inventario/formDocumentoInventario";
@@ -89,6 +92,8 @@ public class DocumentoInventarioController {
 			SessionStatus status) {
 		
 		if (result.hasErrors()) {
+			model.addAttribute("listTipoDocumentoInventario", listTipoDocumentoInventario);
+			model.addAttribute("listBodega", listBodega);
 			model.addAttribute("titulo", "Crear Documento Inventario");
 			return "inventario/formDocumentoInventario";
 		}
@@ -101,12 +106,15 @@ public class DocumentoInventarioController {
 		
 		for (int i = 0; i < itemProducto.length; i++) {
 			ProductoEntity productoEntity = productoService.findOne(itemProducto[i]);
-
-			ItemInventarioEntity linea = new ItemInventarioEntity();
-			linea.setCantidad(cantidad[i]);
-			linea.setProductoEntity(productoEntity);
-			documentoInventarioEntity.addItemFactura(linea);
-
+			BodegaEntity bodegaEntity = bodegaService.findOne(1L);
+			
+			ItemInventarioEntity itemInventnario = new ItemInventarioEntity();
+			itemInventnario.setCantidad(cantidad[i]);
+			itemInventnario.setProductoEntity(productoEntity);
+			itemInventnario.setBodegaEntity(bodegaEntity);
+			documentoInventarioEntity.addItemFactura(itemInventnario);
+			
+			//actualizarInventario();
 			log.info("PRODUCTO: " + itemProducto[i].toString() + ", cantidad: " + cantidad[i].toString());
 		}
 
@@ -135,5 +143,51 @@ public class DocumentoInventarioController {
 	public @ResponseBody List<ProductoEntity> cargarProductos(@PathVariable String term) {
 		return productoService.fetchByDescripcionLike(term);
 	}
+	
+	@GetMapping("/verInformacionDocumentoInventario/{documentoInventario}")
+	public String verInformacionDocumentoInventario(@PathVariable(value="documentoInventario") Long documentoInventario, Model model, RedirectAttributes flash) {
+		DocumentoInventarioEntity documentoInventarioEntity = documentoInventarioService.fetchByIdWithProveedorEntityWhithItemDocumentoInventarioEntityWithProductoEntity(documentoInventario); //proveedorService.findDocumentoInventarioById(documentoInventario);
+		
+		if(documentoInventarioEntity == null) {
+			flash.addFlashAttribute("error", "El Documento Inventario no existe en la base de datos!");
+			return "redirect:/proveedor/listProveedor";
+		}
+		
+		model.addAttribute("documentoInventarioEntity", documentoInventarioEntity);
+		model.addAttribute("titulo", "Documento Inventario: ".concat(documentoInventarioEntity.getObservacion()));
+		
+		return "inventario/verInformacionDocumentoInventario";
+	}
 
+	public void inicializarVariablesDocumentoInventario() {
+		listTipoDocumentoInventario = new ArrayList<TipoDocumentoInventarioEntity>();
+		listTipoDocumentoInventario = tipoDocumentoInventarioService.findAll();
+		
+		listBodega = new ArrayList<BodegaEntity>();
+		listBodega = bodegaService.findAll();
+	}
+	
+	public List<TipoDocumentoInventarioEntity> getListTipoDocumentoInventario() {
+		return listTipoDocumentoInventario;
+	}
+
+	public void setListTipoDocumentoInventario(List<TipoDocumentoInventarioEntity> listTipoDocumentoInventario) {
+		this.listTipoDocumentoInventario = listTipoDocumentoInventario;
+	}
+	
+	public List<BodegaEntity> getListBodega() {
+		return listBodega;
+	}
+
+	public void setListBodega(List<BodegaEntity> listBodega) {
+		this.listBodega = listBodega;
+	}
+
+	public String getCodigoBodega() {
+		return codigoBodega;
+	}
+
+	public void setCodigoBodega(String codigoBodega) {
+		this.codigoBodega = codigoBodega;
+	}
 }

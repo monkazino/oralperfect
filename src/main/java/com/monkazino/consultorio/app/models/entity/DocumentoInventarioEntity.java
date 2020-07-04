@@ -35,19 +35,31 @@ public class DocumentoInventarioEntity implements Serializable {
 	private Long documentoInventario;
 	
 	@NotNull
-	@NotEmpty
-	@Column (name = "OBSERVACION")
-	private String observacion;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "TIPO_DOCUMENTO_INVENTARIO")
+	private TipoDocumentoInventarioEntity tipoDocumentoInventarioEntity;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "PROVEEDOR")
 	private ProveedorEntity proveedorEntity;
+	
+	@NotNull
+	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern="dd/MM/yyyy")
+	@Column(name = "FECHA_CREACION")
+	private Date fechaCreacion;
+	
+	@NotNull
+	@NotEmpty
+	@Column (name = "OBSERVACION")
+	private String observacion;
 	
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "DOCUMENTO_INVENTARIO")
 	private List<ItemInventarioEntity> itemsInventario;
 
 	public DocumentoInventarioEntity() {
+		this.tipoDocumentoInventarioEntity = new TipoDocumentoInventarioEntity();
 		this.itemsInventario = new ArrayList<ItemInventarioEntity>();
 	}
 	
@@ -59,20 +71,36 @@ public class DocumentoInventarioEntity implements Serializable {
 		this.documentoInventario = documentoInventario;
 	}
 
-	public String getObservacion() {
-		return observacion;
-	}
-
-	public void setObservacion(String observacion) {
-		this.observacion = observacion;
+	public TipoDocumentoInventarioEntity getTipoDocumentoInventarioEntity() {
+		return this.tipoDocumentoInventarioEntity;
 	}
 	
+	public void setTipoDocumentoInventarioEntity(TipoDocumentoInventarioEntity tipoDocumentoInventarioEntity) {
+		this.tipoDocumentoInventarioEntity = tipoDocumentoInventarioEntity;
+	}
+
 	public ProveedorEntity getProveedorEntity() {
 		return proveedorEntity;
 	}
 
 	public void setProveedorEntity(ProveedorEntity proveedorEntity) {
 		this.proveedorEntity = proveedorEntity;
+	}
+	
+	public Date getFechaCreacion() {
+		return fechaCreacion;
+	}
+
+	public void setFechaCreacion(Date fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
+	}
+
+	public String getObservacion() {
+		return observacion;
+	}
+
+	public void setObservacion(String observacion) {
+		this.observacion = observacion;
 	}
 	
 	public List<ItemInventarioEntity> getItemsInventario() {
@@ -82,7 +110,7 @@ public class DocumentoInventarioEntity implements Serializable {
 	public void setItemsInventario(List<ItemInventarioEntity> itemsInventario) {
 		this.itemsInventario = itemsInventario;
 	}
-
+	
 	public void addItemFactura(ItemInventarioEntity itemInventario) {
 		this.itemsInventario.add(itemInventario);
 	}

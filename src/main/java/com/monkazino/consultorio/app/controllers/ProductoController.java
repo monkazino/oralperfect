@@ -33,12 +33,13 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.monkazino.consultorio.app.general.enums.EstadoActivoInactivoEnum;
+import com.monkazino.consultorio.app.general.enums.TipoParametroProductoEnum;
+import com.monkazino.consultorio.app.general.util.ListaOpcionesEnumeradores;
 import com.monkazino.consultorio.app.models.entity.ParametroProductoEntity;
 import com.monkazino.consultorio.app.models.entity.ProductoEntity;
 import com.monkazino.consultorio.app.models.service.IParametroProductoService;
 import com.monkazino.consultorio.app.models.service.IProductoService;
-import com.monkazino.consultorio.app.util.general.EstadoActivoInactivoEnum;
-import com.monkazino.consultorio.app.util.general.TipoParametroProductoEnum;
 import com.monkazino.consultorio.app.util.paginator.PageRender;
 
 @Controller
@@ -53,6 +54,8 @@ public class ProductoController {
 	@Autowired
 	private IParametroProductoService parametroProductoService;
 	
+	private Map<String, String> listEstado;
+	
 	private List<ParametroProductoEntity> listaParamTipoProducto;
 	private List<ParametroProductoEntity> listaParamMarca;
 	private List<ParametroProductoEntity> listaParamCategoria;
@@ -62,8 +65,11 @@ public class ProductoController {
 	public String crearProducto(Map<String, Object> model) {
 		inicializarParametrosTipoProducto();
 		ProductoEntity productoEntity = new ProductoEntity();
+		productoEntity.setCosto(0.0);;
+		productoEntity.setPrecio(0.0);;
 		productoEntity.setEstado(EstadoActivoInactivoEnum.ACTIVO.getCodigo());
 		model.put("productoEntity", productoEntity);
+		model.put("listEstado", listEstado);
 		model.put("listaParamTipoProducto", listaParamTipoProducto);
 		model.put("listaParamMarca", listaParamMarca);
 		model.put("listaParamCategoria", listaParamCategoria);
@@ -86,6 +92,7 @@ public class ProductoController {
 			return "redirect:/producto/listProducto";
 		}
 		model.put("productoEntity", productoEntity);
+		model.put("listEstado", listEstado);
 		model.put("listaParamTipoProducto", listaParamTipoProducto);
 		model.put("listaParamMarca", listaParamMarca);
 		model.put("listaParamCategoria", listaParamCategoria);
@@ -98,6 +105,7 @@ public class ProductoController {
 	public String guardarProducto(@Valid ProductoEntity productoEntity, BindingResult result, Map<String, Object> model, RedirectAttributes flash, SessionStatus status) {
 		int countProductoCodigo = 0;
 		if (result.hasErrors()) {
+			model.put("listEstado", listEstado);
 			model.put("listaParamTipoProducto", listaParamTipoProducto);
 			model.put("listaParamMarca", listaParamMarca);
 			model.put("listaParamCategoria", listaParamCategoria);
@@ -193,6 +201,14 @@ public class ProductoController {
 		listaParamCategoria = parametroProductoService.consultarParametrosProductoTipoParametroProducto(TipoParametroProductoEnum.CATEGORIA.getCodigo());
 	}
 	
+	public Map<String, String> getListEstado() {
+		return listEstado;
+	}
+
+	public void setListEstado(Map<String, String> listEstado) {
+		this.listEstado = listEstado;
+	}
+
 	public List<ParametroProductoEntity> getListaParamTipoProducto() {
 		return listaParamTipoProducto;
 	}

@@ -32,9 +32,9 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.monkazino.consultorio.app.general.enums.EstadoActivoInactivoEnum;
 import com.monkazino.consultorio.app.models.entity.PaisEntity;
 import com.monkazino.consultorio.app.models.service.IPaisService;
-import com.monkazino.consultorio.app.util.general.EstadoActivoInactivoEnum;
 import com.monkazino.consultorio.app.util.paginator.PageRender;
 
 @Controller
@@ -47,40 +47,40 @@ public class PaisController {
 	private IPaisService paisService;
 
 	@Secured("ROLE_ADMIN")
-	@RequestMapping(value = "/parametrizacionGeografica/formPais")
+	@RequestMapping(value = "/parametrizacionSistema/parametrizacionGeografica/formPais")
 	public String crearPais(Map<String, Object> model) {
 		PaisEntity paisEntity = new PaisEntity();
 		paisEntity.setEstado(EstadoActivoInactivoEnum.ACTIVO.getCodigo());
 		model.put("paisEntity", paisEntity);
 		model.put("lblTituloFormPais", "Pais");
-		return "parametrizacionGeografica/formPais";
+		return "parametrizacionSistema/parametrizacionGeografica/formPais";
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping(value = "/parametrizacionGeografica/formPais/{pais}")
+	@RequestMapping(value = "/parametrizacionSistema/parametrizacionGeografica/formPais/{pais}")
 	public String editarPais(@PathVariable(value = "pais") Long pais, Map<String, Object> model, RedirectAttributes flash) {
 		PaisEntity paisEntity = null;
 		if (pais > 0) {
 			paisEntity = paisService.findOne(pais);
 			if (paisEntity == null) {
 				flash.addFlashAttribute("error", "El ID del pais no existe en la BBDD!");
-				return "redirect:/parametrizacionGeografica/listPais";
+				return "redirect:/parametrizacionSistema/parametrizacionGeografica/listPais";
 			}
 		} else {
 			flash.addFlashAttribute("error", "El ID del pais no puede ser cero!");
-			return "redirect:/parametrizacionGeografica/listPais";
+			return "redirect:/parametrizacionSistema/parametrizacionGeografica/listPais";
 		}
 		model.put("paisEntity", paisEntity);
 		model.put("lblTituloFormPais", "Pais");
-		return "parametrizacionGeografica/formPais";
+		return "parametrizacionSistema/parametrizacionGeografica/formPais";
 	}
 
 	@Secured("ROLE_ADMIN")
-	@RequestMapping(value = "/parametrizacionGeografica/formPais", method = RequestMethod.POST)
+	@RequestMapping(value = "/parametrizacionSistema/parametrizacionGeografica/formPais", method = RequestMethod.POST)
 	public String guardarPais(@Valid PaisEntity paisEntity, BindingResult result, Map<String, Object> model, RedirectAttributes flash, SessionStatus status) {
 		int countPaisCodigo = 0;
 		if (result.hasErrors()) {
-			return "parametrizacionGeografica/formPais";
+			return "parametrizacionSistema/parametrizacionGeografica/formPais";
 		}
 		if (paisEntity.getPais() == null) {
 			countPaisCodigo = paisService.consultarCountPaisByCodigo(paisEntity.getCodigo().toUpperCase());
@@ -96,7 +96,7 @@ public class PaisController {
 			return "redirect:listPais";
 		} else {
 			model.put("mensajeErrorPais", "El código ya se encuentra registrado");
-			return "parametrizacionGeografica/formPais";
+			return "parametrizacionSistema/parametrizacionGeografica/formPais";
 		}
 	}
 
@@ -114,23 +114,23 @@ public class PaisController {
 				flash.addFlashAttribute("success", "Pais no se puede eliminar, tiene asociado departamentos");
 			}
 		}
-		return "redirect:/parametrizacionGeografica/listPais";
+		return "redirect:/parametrizacionSistema/parametrizacionGeografica/listPais";
 	}
 
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@GetMapping(value = "/parametrizacionGeografica/listDepartamentosPais/{pais}")
+	@GetMapping(value = "/parametrizacionSistema/parametrizacionGeografica/listDepartamentosPais/{pais}")
 	public String listDepartamentosPais(@PathVariable(value = "pais") Long pais, Map<String, Object> model, RedirectAttributes flash) {
 		PaisEntity paisEntity = paisService.fetchByIdWithDepartamentos(pais);
 		if (paisEntity == null) {
 			flash.addFlashAttribute("error", "El pais no existe en la base de datos");
-			return "redirect:/parametrizacionGeografica/listPais";
+			return "redirect:/parametrizacionSistema/parametrizacionGeografica/listPais";
 		}
 		model.put("paisEntity", paisEntity);
 		model.put("lblTituloDetallePais", "Departamentos: " + paisEntity.getDescripcion());
-		return "parametrizacionGeografica/listDepartamentosPais";
+		return "parametrizacionSistema/parametrizacionGeografica/listDepartamentosPais";
 	}
 
-	@RequestMapping(value = {"/parametrizacionGeografica/listPais"}, method = RequestMethod.GET)
+	@RequestMapping(value = {"/parametrizacionSistema/parametrizacionGeografica/listPais"}, method = RequestMethod.GET)
 	public String listPais(@RequestParam(name = "page", defaultValue = "0") int page, Model model, Authentication authentication, HttpServletRequest request) {
 
 		if(authentication != null) {
@@ -167,12 +167,12 @@ public class PaisController {
 
 		Page<PaisEntity> paises = paisService.findAll(pageRequest);
 
-		PageRender<PaisEntity> pageRender = new PageRender<PaisEntity>("/parametrizacionGeografica/listPais", paises);
+		PageRender<PaisEntity> pageRender = new PageRender<PaisEntity>("/parametrizacionSistema/parametrizacionGeografica/listPais", paises);
 		model.addAttribute("lblTituloAplicacion", "Monkazino Soft");
 		model.addAttribute("lblTituloListadoPais", "Paises");
 		model.addAttribute("paises", paises);
 		model.addAttribute("page", pageRender);
-		return "parametrizacionGeografica/listPais";
+		return "parametrizacionSistema/parametrizacionGeografica/listPais";
 	}
 	
 	private boolean hasRole(String role) {

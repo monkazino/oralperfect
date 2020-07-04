@@ -13,7 +13,7 @@ public interface ITipoParametroPersonaService {
 	
 	public void delete(Long tipoParametro);
 	
-	public TipoParametroPersonaEntity findOne(Long tipoParametro);
+	public TipoParametroPersonaEntity findOne(Long tipoParametroPersona);
 	
 	public List<TipoParametroPersonaEntity> findAll();
 	

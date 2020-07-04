@@ -106,14 +106,14 @@ public class ProveedorController {
 		return "proveedor/listProveedor";
 	}
 
-	public void inicializarParametrosPersona() {
+	public void inicializarVariablesProveedor() {
 		
 	}
 
 	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/proveedor/formProveedor")
 	public String crearProveedor(Map<String, Object> model) {
-		inicializarParametrosPersona();
+		inicializarVariablesProveedor();
 		ProveedorEntity proveedorEntity = new ProveedorEntity();
 		model.put("proveedorEntity", proveedorEntity);
 		model.put("lblTituloFormularioProveedor", "Proveedor");
@@ -123,7 +123,7 @@ public class ProveedorController {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value = "/proveedor/formProveedor/{id}")
 	public String editarProveedor(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
-		inicializarParametrosPersona();
+		inicializarVariablesProveedor();
 		ProveedorEntity proveedorEntity = null;
 
 		if (id > 0) {

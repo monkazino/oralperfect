@@ -38,6 +38,10 @@ public class ItemInventarioEntity implements Serializable {
 	@JoinColumn(name = "PRODUCTO")
 	private ProductoEntity productoEntity;
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "BODEGA")
+	private BodegaEntity bodegaEntity;
+
 	public ItemInventarioEntity() {
 		
 	}
@@ -64,6 +68,14 @@ public class ItemInventarioEntity implements Serializable {
 
 	public void setProductoEntity(ProductoEntity productoEntity) {
 		this.productoEntity = productoEntity;
+	}
+
+	public BodegaEntity getBodegaEntity() {
+		return bodegaEntity;
+	}
+
+	public void setBodegaEntity(BodegaEntity bodegaEntity) {
+		this.bodegaEntity = bodegaEntity;
 	}
 
 	public Double calcularImporte() {

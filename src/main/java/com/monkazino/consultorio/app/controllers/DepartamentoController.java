@@ -19,11 +19,11 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.monkazino.consultorio.app.general.enums.EstadoActivoInactivoEnum;
 import com.monkazino.consultorio.app.models.entity.DepartamentoEntity;
 import com.monkazino.consultorio.app.models.entity.PaisEntity;
 import com.monkazino.consultorio.app.models.service.IDepartamentoService;
 import com.monkazino.consultorio.app.models.service.IPaisService;
-import com.monkazino.consultorio.app.util.general.EstadoActivoInactivoEnum;
 
 @Controller
 @SessionAttributes("departamentoEntity")
@@ -37,46 +37,46 @@ public class DepartamentoController {
 	@Autowired
 	private IPaisService paisService;
 
-	@GetMapping("/parametrizacionGeografica/formDepartamento/pais/{pais}")
+	@GetMapping("/parametrizacionSistema/parametrizacionGeografica/formDepartamento/pais/{pais}")
 	public String crear(@PathVariable(value = "pais") Long pais, Map<String, Object> model, RedirectAttributes flash) {
 		PaisEntity paisEntity = paisService.findOne(pais);
 		if (paisEntity == null) {
 			flash.addFlashAttribute("error", "El pais no existe en la base de datos");
-			return "redirect:/parametrizacionGeografica/listPais";
+			return "redirect:/parametrizacionSistema/parametrizacionGeografica/listPais";
 		}
 		DepartamentoEntity departamentoEntity= new DepartamentoEntity();
 		departamentoEntity.setPaisEntity(paisEntity);
 		departamentoEntity.setEstado(EstadoActivoInactivoEnum.ACTIVO.getCodigo());
 		model.put("departamentoEntity", departamentoEntity);
 		model.put("lblTituloFormDepartamento", "Departamento");
-		return "parametrizacionGeografica/formDepartamento";
+		return "parametrizacionSistema/parametrizacionGeografica/formDepartamento";
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping(value = "/parametrizacionGeografica/formDepartamento/departamento/{departamento}")
+	@RequestMapping(value = "/parametrizacionSistema/parametrizacionGeografica/formDepartamento/departamento/{departamento}")
 	public String editarDepartamento(@PathVariable(value = "departamento") Long departamento, Map<String, Object> model, RedirectAttributes flash) {
 		DepartamentoEntity departamentoEntity = null;
 		if (departamento > 0) {
 			departamentoEntity = departamentoService.findOne(departamento);
 			if (departamentoEntity == null) {
 				flash.addFlashAttribute("error", "El ID del departamento no existe en la BBDD!");
-				return "redirect:/parametrizacionGeografica/listCiudadesDepartamento";
+				return "redirect:/parametrizacionSistema/parametrizacionGeografica/listCiudadesDepartamento";
 			}
 		} else {
 			flash.addFlashAttribute("error", "El ID del departamento no puede ser cero!");
-			return "redirect:/parametrizacionGeografica/listCiudadesDepartamento";
+			return "redirect:/parametrizacionSistema/parametrizacionGeografica/listCiudadesDepartamento";
 		}
 		model.put("departamentoEntity", departamentoEntity);
 		model.put("lblTituloFormDepartamento", "Departamento");
-		return "parametrizacionGeografica/formDepartamento";
+		return "parametrizacionSistema/parametrizacionGeografica/formDepartamento";
 	}
 
 	@Secured("ROLE_ADMIN")
-	@RequestMapping(value = "/parametrizacionGeografica/formDepartamento", method = RequestMethod.POST)
+	@RequestMapping(value = "/parametrizacionSistema/parametrizacionGeografica/formDepartamento", method = RequestMethod.POST)
 	public String guardarDepartamento(@Valid DepartamentoEntity departamentoEntity, BindingResult result, Map<String, Object> model, RedirectAttributes flash, SessionStatus status) {
 		int countDepartamentoCodigo = 0;
 		if (result.hasErrors()) {
-			return "parametrizacionGeografica/formDepartamento";
+			return "parametrizacionSistema/parametrizacionGeografica/formDepartamento";
 		}
 		if (departamentoEntity.getDepartamento() == null) {
 			countDepartamentoCodigo = departamentoService.consultarCountDepartamentoByCodigoPais(departamentoEntity.getCodigo().toUpperCase(), departamentoEntity.getPaisEntity().getPais());
@@ -89,10 +89,10 @@ public class DepartamentoController {
 			departamentoService.save(departamentoEntity);
 			status.setComplete();
 			flash.addFlashAttribute("success", "Registro almacenado correctamente");
-			return "redirect:/parametrizacionGeografica/listDepartamentosPais/" + departamentoEntity.getPaisEntity().getPais();
+			return "redirect:/parametrizacionSistema/parametrizacionGeografica/listDepartamentosPais/" + departamentoEntity.getPaisEntity().getPais();
 		} else {
 			model.put("mensajeErrorDepartamento", "El código ya se encuentra registrado");
-			return "parametrizacionGeografica/formDepartamento";
+			return "parametrizacionSistema/parametrizacionGeografica/formDepartamento";
 		}
 	}
 
@@ -115,19 +115,19 @@ public class DepartamentoController {
 				flash.addFlashAttribute("error", "El ID del departamento no existe en la BBDD!");
 			} 
 		}
-		return "redirect:/parametrizacionGeografica/listDepartamentosPais/" + pais;
+		return "redirect:/parametrizacionSistema/parametrizacionGeografica/listDepartamentosPais/" + pais;
 	}
 	
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@GetMapping(value = "/parametrizacionGeografica/listCiudadesDepartamento/{departamento}")
+	@GetMapping(value = "/parametrizacionSistema/parametrizacionGeografica/listCiudadesDepartamento/{departamento}")
 	public String listCiudadesDepartamento(@PathVariable(value = "departamento") Long departamento, Map<String, Object> model, RedirectAttributes flash) {
 		DepartamentoEntity departamentoEntity = departamentoService.fetchByIdWithCiudades(departamento);
 		if (departamentoEntity == null) {
 			flash.addFlashAttribute("error", "El departamento no existe en la base de datos");
-			return "redirect:/parametrizacionGeografica/listCiudadesDepartamento";
+			return "redirect:/parametrizacionSistema/parametrizacionGeografica/listCiudadesDepartamento";
 		}
 		model.put("departamentoEntity", departamentoEntity);
 		model.put("lblTituloDetalleDepartamento", "Ciudades: " + departamentoEntity.getDescripcion());
-		return "parametrizacionGeografica/listCiudadesDepartamento";
+		return "parametrizacionSistema/parametrizacionGeografica/listCiudadesDepartamento";
 	}
 }

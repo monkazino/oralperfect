@@ -20,12 +20,34 @@
 					<div class="form-group row">
 						<label for="proveedor" class="col-sm-2 col-form-label" th:text="'Proveedor'"></label>
 						<div class="col-sm-6">
-							<input name="proveedor"
-								th:value="${documentoInventarioEntity.proveedorEntity.razonSocial}"
-								class="form-control" disabled='disabled' />
+							<input name="proveedor" th:value="${documentoInventarioEntity.proveedorEntity.razonSocial}" class="form-control" disabled='disabled' />
 						</div>
 					</div>
-					
+					<div class="form-group row">
+						<label for="tipoDocumentoInventarioEntity" class="col-sm-2 col-form-label">Tipo de Documento Inventario</label>
+						<div class="col-sm-6">
+							 <select th:field="*{tipoDocumentoInventarioEntity}">
+	                         	<option value=""></option>
+	                         	<option th:each="tipoDocumentoInventarioEntity : ${listTipoDocumentoInventario}" th:value="${tipoDocumentoInventarioEntity.tipoDocumentoInventario}" th:utext="${tipoDocumentoInventarioEntity.descripcion}"/>
+			                 </select>
+						</div>
+					</div>					
+					<!--div class="form-group row">
+						<label for="bodegaEntity" class="col-sm-2 col-form-label">Tipo de Documento Inventario</label>
+						<div class="col-sm-6">
+							 <select th:field="*{bodegaEntity}">
+	                         	<option value=""></option>
+	                         	<option th:each="bodegaEntity : ${listBodega}" th:value="${bodegaEntity.bodega}" th:utext="${bodegaEntity.descripcion}"/>
+			                 </select>
+						</div>
+					</div-->					
+					<div class="form-group row">
+						<label for="fechaCreacion" class="col-sm-2 col-form-label">Fecha Creación</label>
+						<div class="col-sm-6">
+							<input type="text" class="form-control" th:field="*{fechaCreacion}" th:errorclass="'form-control alert-danger'" th:disabled="true" />
+							<small class="form-text text-danger" th:if="${#fields.hasErrors('fechaCreacion')}" th:errors="*{fechaCreacion}"></small>
+						</div>
+					</div>
 					<!--div class="form-group row">
 						<label for="descripcion" class="col-sm-2 col-form-label"
 							th:text="'Descripción'"></label>
@@ -36,8 +58,7 @@
 					</div-->
 					
 					<div class="form-group row">
-						<label for="observacion" class="col-sm-2 col-form-label"
-							th:text="'Observación'"></label>
+						<label for="observacion" class="col-sm-2 col-form-label" th:text="'Observación'"></label>
 						<div class="col-sm-6">
 							<textarea th:field="*{observacion}" class="form-control"></textarea>
 						</div>
@@ -50,7 +71,7 @@
 						</div>
 					</div>
 					
-					<table th:replace="inventario/plantilla-items-documento-inventario :: itemsDocumentoInventario"></table>
+					<table th:replace="inventario/plantillaItemsDocumentoInventario :: itemsDocumentoInventario"></table>
 
 					<table id="cargarItemProductos"
 						class="table table-sm table-striped table-hover">

@@ -19,11 +19,11 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.monkazino.consultorio.app.general.enums.EstadoActivoInactivoEnum;
 import com.monkazino.consultorio.app.models.entity.BarrioEntity;
 import com.monkazino.consultorio.app.models.entity.LocalidadEntity;
 import com.monkazino.consultorio.app.models.service.IBarrioService;
 import com.monkazino.consultorio.app.models.service.ILocalidadService;
-import com.monkazino.consultorio.app.util.general.EstadoActivoInactivoEnum;
 
 @Controller
 @SessionAttributes("barrioEntity")
@@ -37,46 +37,46 @@ public class BarrioController {
 	@Autowired
 	private ILocalidadService localidadService;
 
-	@GetMapping("/parametrizacionGeografica/formBarrio/localidad/{localidad}")
+	@GetMapping("/parametrizacionSistema/parametrizacionGeografica/formBarrio/localidad/{localidad}")
 	public String crear(@PathVariable(value = "localidad") Long localidad, Map<String, Object> model, RedirectAttributes flash) {
 		LocalidadEntity localidadEntity = localidadService.findOne(localidad);
 		if (localidadEntity == null) {
 			flash.addFlashAttribute("error", "La barrio no existe en la base de datos");
-			return "redirect:/parametrizacionGeografica/listBarriosLocalidad";
+			return "redirect:/parametrizacionSistema/parametrizacionGeografica/listBarriosLocalidad";
 		}
 		BarrioEntity barrioEntity= new BarrioEntity();
 		barrioEntity.setLocalidadEntity(localidadEntity);
 		barrioEntity.setEstado(EstadoActivoInactivoEnum.ACTIVO.getCodigo());
 		model.put("barrioEntity", barrioEntity);
 		model.put("lblTituloFormBarrio", "Barrio");
-		return "parametrizacionGeografica/formBarrio";
+		return "parametrizacionSistema/parametrizacionGeografica/formBarrio";
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping(value = "/parametrizacionGeografica/formBarrio/barrio/{localidad}")
+	@RequestMapping(value = "/parametrizacionSistema/parametrizacionGeografica/formBarrio/barrio/{localidad}")
 	public String editarBarrio(@PathVariable(value = "localidad") Long localidad, Map<String, Object> model, RedirectAttributes flash) {
 		BarrioEntity barrioEntity = null;
 		if (localidad > 0) {
 			barrioEntity = barrioService.findOne(localidad);
 			if (barrioEntity == null) {
 				flash.addFlashAttribute("error", "El ID de la barrio no existe en la BBDD!");
-				return "redirect:/parametrizacionGeografica/listBarriosLocalidad";
+				return "redirect:/parametrizacionSistema/parametrizacionGeografica/listBarriosLocalidad";
 			}
 		} else {
 			flash.addFlashAttribute("error", "El ID de la barrio no puede ser cero!");
-			return "redirect:/parametrizacionGeografica/listBarriosLocalidad";
+			return "redirect:/parametrizacionSistema/parametrizacionGeografica/listBarriosLocalidad";
 		}
 		model.put("barrioEntity", barrioEntity);
 		model.put("lblTituloFormBarrio", "Barrio");
-		return "parametrizacionGeografica/formBarrio";
+		return "parametrizacionSistema/parametrizacionGeografica/formBarrio";
 	}
 
 	@Secured("ROLE_ADMIN")
-	@RequestMapping(value = "/parametrizacionGeografica/formBarrio", method = RequestMethod.POST)
+	@RequestMapping(value = "/parametrizacionSistema/parametrizacionGeografica/formBarrio", method = RequestMethod.POST)
 	public String guardarBarrio(@Valid BarrioEntity barrioEntity, BindingResult result, Map<String, Object> model, RedirectAttributes flash, SessionStatus status) {
 		int countBarrioCodigo = 0;
 		if (result.hasErrors()) {
-			return "parametrizacionGeografica/formBarrio";
+			return "parametrizacionSistema/parametrizacionGeografica/formBarrio";
 		}
 		if (barrioEntity.getBarrio() == null) {
 			countBarrioCodigo = barrioService.consultarCountBarrioByCodigoLocalidad(barrioEntity.getCodigo().toUpperCase(), barrioEntity.getLocalidadEntity().getLocalidad());
@@ -89,10 +89,10 @@ public class BarrioController {
 			barrioService.save(barrioEntity);
 			status.setComplete();
 			flash.addFlashAttribute("success", "Registro almacenado correctamente");
-			return "redirect:/parametrizacionGeografica/listBarriosLocalidad/" + barrioEntity.getLocalidadEntity().getLocalidad();
+			return "redirect:/parametrizacionSistema/parametrizacionGeografica/listBarriosLocalidad/" + barrioEntity.getLocalidadEntity().getLocalidad();
 		} else {
 			model.put("mensajeErrorBarrio", "El código ya se encuentra registrado");
-			return "parametrizacionGeografica/formBarrio";
+			return "parametrizacionSistema/parametrizacionGeografica/formBarrio";
 		}
 	}
 
@@ -111,7 +111,7 @@ public class BarrioController {
 				flash.addFlashAttribute("error", "El ID del barrio no existe en la BBDD!");
 			} 
 		}
-		return "redirect:/parametrizacionGeografica/listBarriosLocalidad/" + localidad;
+		return "redirect:/parametrizacionSistema/parametrizacionGeografica/listBarriosLocalidad/" + localidad;
 	}
 }
 

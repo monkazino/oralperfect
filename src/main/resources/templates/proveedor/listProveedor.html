@@ -23,6 +23,7 @@
 							<th>Ingresar</th>
 							<th sec:authorize="hasRole('ROLE_ADMIN')">Editar</th>
 							<th sec:authorize="hasRole('ROLE_ADMIN')">Eliminar</th>
+							<th>Ingresar</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -31,9 +32,9 @@
 							th:href="@{/proveedor/verInformacionProveedor/} + ${proveedorEntity.proveedor}" th:text="${proveedorEntity.proveedor}"></a></td>
 							<td th:text="${proveedorEntity.numeroIdentificacion}"></td>
 							<td th:text="${proveedorEntity.razonSocial}"></td>
-							<td><a class="btn btn-success btn-sm" th:href="@{'/inventario/formDocumentoInventario/' + ${proveedorEntity.proveedor}}" th:text="'Ingresar Inventario'"></a></td>
 							<td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-primary btn-xs" th:href="@{/proveedor/formProveedor/} + ${proveedorEntity.proveedor}" th:text="'Editar'"></a></td>
 							<td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-danger btn-xs" th:href="@{/eliminarProveedor/} + ${proveedorEntity.proveedor}" th:text="'Eliminar'" onclick="return confirm('Estas seguro que quieres eliminar?');"></a></td>
+							<td><a class="btn btn-success btn-sm" th:href="@{'/inventario/formDocumentoInventario/' + ${proveedorEntity.proveedor}}" th:text="'Ingresar Inventario'"></a></td>
 						</tr>
 					</tbody>
 

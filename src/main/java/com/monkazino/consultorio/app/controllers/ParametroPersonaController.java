@@ -2,6 +2,7 @@ package com.monkazino.consultorio.app.controllers;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,11 +34,12 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.monkazino.consultorio.app.general.enums.EstadoActivoInactivoEnum;
+import com.monkazino.consultorio.app.general.util.ListaOpcionesEnumeradores;
 import com.monkazino.consultorio.app.models.entity.ParametroPersonaEntity;
 import com.monkazino.consultorio.app.models.entity.TipoParametroPersonaEntity;
 import com.monkazino.consultorio.app.models.service.IParametroPersonaService;
 import com.monkazino.consultorio.app.models.service.ITipoParametroPersonaService;
-import com.monkazino.consultorio.app.util.general.EstadoActivoInactivoEnum;
 import com.monkazino.consultorio.app.util.paginator.PageRender;
 
 @Controller
@@ -52,24 +54,28 @@ public class ParametroPersonaController {
 	@Autowired
 	private ITipoParametroPersonaService tipoParametroPersonaService;
 
-	@GetMapping("/tipoParametroPersona/formParametroPersona/tipoParametroPersona/{tipoParametroPersona}")
+	private Map<String, String> listEstado;
+	
+	@GetMapping("/parametrizacionSistema/tipoParametroPersona/formParametroPersona/tipoParametroPersona/{tipoParametroPersona}")
 	public String crearParametroPersona(@PathVariable(value = "tipoParametroPersona") Long tipoParametroPersona, Map<String, Object> model, RedirectAttributes flash) {
 		TipoParametroPersonaEntity tipoParametroPersonaEntity = tipoParametroPersonaService.findOne(tipoParametroPersona);
 		if (tipoParametroPersonaEntity == null) {
 			flash.addFlashAttribute("error", "El tipo parametro persona no existe en la base de datos");
-			return "redirect:/tipoParametroPersona/listTipoParametroPersona";
+			return "redirect:/parametrizacionSistema/tipoParametroPersona/listTipoParametroPersona";
 		}
+		inicializarVariablesParametroPersona();
 		ParametroPersonaEntity parametroPersonaEntity= new ParametroPersonaEntity();
 		parametroPersonaEntity.setTipoParametroPersonaEntity(tipoParametroPersonaEntity);
 		parametroPersonaEntity.setFechaCreacion(new Date());
 		parametroPersonaEntity.setEstado(EstadoActivoInactivoEnum.ACTIVO.getCodigo());
 		model.put("parametroPersonaEntity", parametroPersonaEntity);
+		model.put("listEstado", listEstado);
 		model.put("lblTituloFormularioParametroPersona", "Parametro Persona");
-		return "tipoParametroPersona/formParametroPersona";
+		return "parametrizacionSistema/tipoParametroPersona/formParametroPersona";
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping(value = "/tipoParametroPersona/formParametroPersona/parametroPersona/{parametroPersona}")
+	@RequestMapping(value = "/parametrizacionSistema/tipoParametroPersona/formParametroPersona/parametroPersona/{parametroPersona}")
 	public String editarParametroPersona(@PathVariable(value = "parametroPersona") Long parametroPersona, Map<String, Object> model, RedirectAttributes flash) {
 		ParametroPersonaEntity parametroPersonaEntity = null;
 		if (parametroPersona > 0) {
@@ -82,17 +88,19 @@ public class ParametroPersonaController {
 			flash.addFlashAttribute("error", "El ID del parametro persona no puede ser cero!");
 			return "redirect:/parametroPersona/listParametroPersona";
 		}
+		inicializarVariablesParametroPersona();
 		model.put("parametroPersonaEntity", parametroPersonaEntity);
 		model.put("lblTituloFormularioParametroPersona", "Parametro Persona");
-		return "tipoParametroPersona/formParametroPersona";
+		return "parametrizacionSistema/tipoParametroPersona/formParametroPersona";
 	}
 
 	@Secured("ROLE_ADMIN")
-	@RequestMapping(value = "/tipoParametroPersona/formParametroPersona", method = RequestMethod.POST)
+	@RequestMapping(value = "/parametrizacionSistema/tipoParametroPersona/formParametroPersona", method = RequestMethod.POST)
 	public String guardarParametroPersona(@Valid ParametroPersonaEntity parametroPersonaEntity, BindingResult result, Map<String, Object> model, RedirectAttributes flash, SessionStatus status) {
 		int countParametroPersonaCodigo = 0;
 		if (result.hasErrors()) {
-			return "/tipoParametroPersona/formParametroPersona";
+			model.put("listEstado", listEstado);
+			return "/parametrizacionSistema/tipoParametroPersona/formParametroPersona";
 		}
 		if (parametroPersonaEntity.getParametroPersona() == null) {
 			countParametroPersonaCodigo = parametroPersonaService.consultarCountParametroPersonaByCodigoTipoParametroPersona(parametroPersonaEntity.getCodigo().toUpperCase(), parametroPersonaEntity.getTipoParametroPersonaEntity().getTipoParametroPersona());
@@ -105,10 +113,10 @@ public class ParametroPersonaController {
 			parametroPersonaService.save(parametroPersonaEntity);
 			status.setComplete();
 			flash.addFlashAttribute("success", "Registro almacenado correctamente");
-			return "redirect:/tipoParametroPersona/listParametroPersona/" + parametroPersonaEntity.getTipoParametroPersonaEntity().getTipoParametroPersona();
+			return "redirect:/parametrizacionSistema/tipoParametroPersona/listParametroPersona/" + parametroPersonaEntity.getTipoParametroPersonaEntity().getTipoParametroPersona();
 		} else {
 			model.put("mensajeErrorParametroPersona", "El código ya se encuentra registrado");
-			return "tipoParametroPersona/formParametroPersona";
+			return "parametrizacionSistema/tipoParametroPersona/formParametroPersona";
 		}
 	}
 
@@ -132,7 +140,7 @@ public class ParametroPersonaController {
 				flash.addFlashAttribute("error", "El ID del parametro persona no existe en la BBDD!");
 			} 
 		}
-		return "redirect:/tipoParametroPersona/listParametroPersona/" + tipoParametroPersona;
+		return "redirect:/parametrizacionSistema/tipoParametroPersona/listParametroPersona/" + tipoParametroPersona;
 	}
 	
 	@RequestMapping(value = {"/parametroPersona/listParametroPersona"}, method = RequestMethod.GET)
@@ -181,6 +189,19 @@ public class ParametroPersonaController {
 		return "parametroPersona/listParametroPersona";
 	}
 	
+	public void inicializarVariablesParametroPersona() {
+		listEstado = new HashMap<String, String>();
+		listEstado= ListaOpcionesEnumeradores.getListEstado();
+	}
+	
+	public Map<String, String> getListEstado() {
+		return listEstado;
+	}
+
+	public void setListEstado(Map<String, String> listEstado) {
+		this.listEstado = listEstado;
+	}
+
 	private boolean hasRole(String role) {
 		
 		SecurityContext context = SecurityContextHolder.getContext();

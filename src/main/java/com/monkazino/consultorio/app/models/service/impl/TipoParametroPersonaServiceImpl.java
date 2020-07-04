@@ -19,15 +19,16 @@ public class TipoParametroPersonaServiceImpl implements ITipoParametroPersonaSer
 	private ITipoParametroPersonaDao tipoParametroPersonaDao;
 	
 	@Override
-	@Transactional(readOnly = true)
-	public List<TipoParametroPersonaEntity> findAll() {
-		return (List<TipoParametroPersonaEntity>) tipoParametroPersonaDao.findAll();
+	@Transactional
+	public void save(TipoParametroPersonaEntity tipoParametroPersonaEntity) {
+		tipoParametroPersonaDao.save(tipoParametroPersonaEntity);
+
 	}
 
 	@Override
 	@Transactional
-	public void save(TipoParametroPersonaEntity tipoParametroPersonaEntity) {
-		tipoParametroPersonaDao.save(tipoParametroPersonaEntity);
+	public void delete(Long tipoParametroPersona) {
+		tipoParametroPersonaDao.deleteById(tipoParametroPersona);
 
 	}
 
@@ -38,10 +39,9 @@ public class TipoParametroPersonaServiceImpl implements ITipoParametroPersonaSer
 	}
 	
 	@Override
-	@Transactional
-	public void delete(Long tipoParametroPersona) {
-		tipoParametroPersonaDao.deleteById(tipoParametroPersona);
-
+	@Transactional(readOnly = true)
+	public List<TipoParametroPersonaEntity> findAll() {
+		return (List<TipoParametroPersonaEntity>) tipoParametroPersonaDao.findAll();
 	}
 
 	@Override

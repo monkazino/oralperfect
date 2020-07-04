@@ -19,11 +19,11 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.monkazino.consultorio.app.general.enums.EstadoActivoInactivoEnum;
 import com.monkazino.consultorio.app.models.entity.CiudadEntity;
 import com.monkazino.consultorio.app.models.entity.DepartamentoEntity;
 import com.monkazino.consultorio.app.models.service.ICiudadService;
 import com.monkazino.consultorio.app.models.service.IDepartamentoService;
-import com.monkazino.consultorio.app.util.general.EstadoActivoInactivoEnum;
 
 @Controller
 @SessionAttributes("ciudadEntity")
@@ -37,46 +37,46 @@ public class CiudadController {
 	@Autowired
 	private IDepartamentoService departamentoService;
 
-	@GetMapping("/parametrizacionGeografica/formCiudad/departamento/{departamento}")
+	@GetMapping("/parametrizacionSistema/parametrizacionGeografica/formCiudad/departamento/{departamento}")
 	public String crear(@PathVariable(value = "departamento") Long departamento, Map<String, Object> model, RedirectAttributes flash) {
 		DepartamentoEntity departamentoEntity = departamentoService.findOne(departamento);
 		if (departamentoEntity == null) {
 			flash.addFlashAttribute("error", "La ciudad no existe en la base de datos");
-			return "redirect:/parametrizacionGeografica/listLocalidadesCiudad";
+			return "redirect:/parametrizacionSistema/parametrizacionGeografica/listLocalidadesCiudad";
 		}
 		CiudadEntity ciudadEntity= new CiudadEntity();
 		ciudadEntity.setDepartamentoEntity(departamentoEntity);
 		ciudadEntity.setEstado(EstadoActivoInactivoEnum.ACTIVO.getCodigo());
 		model.put("ciudadEntity", ciudadEntity);
 		model.put("lblTituloFormCiudad", "Ciudad");
-		return "parametrizacionGeografica/formCiudad";
+		return "parametrizacionSistema/parametrizacionGeografica/formCiudad";
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping(value = "/parametrizacionGeografica/formCiudad/ciudad/{ciudad}")
+	@RequestMapping(value = "/parametrizacionSistema/parametrizacionGeografica/formCiudad/ciudad/{ciudad}")
 	public String editarCiudad(@PathVariable(value = "ciudad") Long ciudad, Map<String, Object> model, RedirectAttributes flash) {
 		CiudadEntity ciudadEntity = null;
 		if (ciudad > 0) {
 			ciudadEntity = ciudadService.findOne(ciudad);
 			if (ciudadEntity == null) {
 				flash.addFlashAttribute("error", "El ID de la ciudad no existe en la BBDD!");
-				return "redirect:/parametrizacionGeografica/listLocalidadesCiudad";
+				return "redirect:/parametrizacionSistema/parametrizacionGeografica/listLocalidadesCiudad";
 			}
 		} else {
 			flash.addFlashAttribute("error", "El ID de la ciudad no puede ser cero!");
-			return "redirect:/parametrizacionGeografica/listLocalidadesCiudad";
+			return "redirect:/parametrizacionSistema/parametrizacionGeografica/listLocalidadesCiudad";
 		}
 		model.put("ciudadEntity", ciudadEntity);
 		model.put("lblTituloFormCiudad", "Ciudad");
-		return "parametrizacionGeografica/formCiudad";
+		return "parametrizacionSistema/parametrizacionGeografica/formCiudad";
 	}
 
 	@Secured("ROLE_ADMIN")
-	@RequestMapping(value = "/parametrizacionGeografica/formCiudad", method = RequestMethod.POST)
+	@RequestMapping(value = "/parametrizacionSistema/parametrizacionGeografica/formCiudad", method = RequestMethod.POST)
 	public String guardarCiudad(@Valid CiudadEntity ciudadEntity, BindingResult result, Map<String, Object> model, RedirectAttributes flash, SessionStatus status) {
 		int countCiudadCodigo = 0;
 		if (result.hasErrors()) {
-			return "parametrizacionGeografica/formCiudad";
+			return "parametrizacionSistema/parametrizacionGeografica/formCiudad";
 		}
 		if (ciudadEntity.getCiudad() == null) {
 			countCiudadCodigo = ciudadService.consultarCountCiudadByCodigoDepartamento(ciudadEntity.getCodigo().toUpperCase(), ciudadEntity.getDepartamentoEntity().getDepartamento());
@@ -89,10 +89,10 @@ public class CiudadController {
 			ciudadService.save(ciudadEntity);
 			status.setComplete();
 			flash.addFlashAttribute("success", "Registro almacenado correctamente");
-			return "redirect:/parametrizacionGeografica/listCiudadesDepartamento/" + ciudadEntity.getDepartamentoEntity().getDepartamento();
+			return "redirect:/parametrizacionSistema/parametrizacionGeografica/listCiudadesDepartamento/" + ciudadEntity.getDepartamentoEntity().getDepartamento();
 		} else {
 			model.put("mensajeErrorCiudad", "El código ya se encuentra registrado");
-			return "parametrizacionGeografica/formCiudad";
+			return "parametrizacionSistema/parametrizacionGeografica/formCiudad";
 		}
 	}
 
@@ -115,19 +115,19 @@ public class CiudadController {
 				flash.addFlashAttribute("error", "El ID del ciudad no existe en la BBDD!");
 			} 
 		}
-		return "redirect:/parametrizacionGeografica/listCiudadesDepartamento/" + departamento;
+		return "redirect:/parametrizacionSistema/parametrizacionGeografica/listCiudadesDepartamento/" + departamento;
 	}
 	
 	@PreAuthorize("hasRole('ROLE_USER')")
-	@GetMapping(value = "/parametrizacionGeografica/listLocalidadesCiudad/{id}")
+	@GetMapping(value = "/parametrizacionSistema/parametrizacionGeografica/listLocalidadesCiudad/{ciudad}")
 	public String listLocalidadesCiudad(@PathVariable(value = "ciudad") Long ciudad, Map<String, Object> model, RedirectAttributes flash) {
 		CiudadEntity ciudadEntity = ciudadService.fetchByIdWithLocalidades(ciudad);
 		if (ciudadEntity == null) {
 			flash.addFlashAttribute("error", "La ciudad no existe en la base de datos");
-			return "redirect:/parametrizacionGeografica/listLocalidadesCiudad";
+			return "redirect:/parametrizacionSistema/parametrizacionGeografica/listLocalidadesCiudad";
 		}
 		model.put("ciudadEntity", ciudadEntity);
 		model.put("lblTituloDetalleCiudad", "Detalle ciudad: " + ciudadEntity.getDescripcion());
-		return "parametrizacionGeografica/listLocalidadesCiudad";
+		return "parametrizacionSistema/parametrizacionGeografica/listLocalidadesCiudad";
 	}
 }

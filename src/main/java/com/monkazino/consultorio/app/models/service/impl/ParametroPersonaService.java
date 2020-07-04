@@ -8,10 +8,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.monkazino.consultorio.app.general.enums.EstadoActivoInactivoEnum;
 import com.monkazino.consultorio.app.models.dao.IParametroPersonaDao;
 import com.monkazino.consultorio.app.models.entity.ParametroPersonaEntity;
 import com.monkazino.consultorio.app.models.service.IParametroPersonaService;
-import com.monkazino.consultorio.app.util.general.EstadoActivoInactivoEnum;
 
 @Service
 public class ParametroPersonaService implements IParametroPersonaService {
