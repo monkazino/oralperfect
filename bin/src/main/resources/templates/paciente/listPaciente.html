@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="layout/layout :: head"></head>
+<body>
+
+	<header th:replace="layout/layout :: header"></header>
+
+	<div class="container py-4">
+
+		<div class="card bg-light">
+			<div class="card-header" th:text="${lblTituloListadoPaciente}"></div>
+			<div class="card-body">
+
+				<h4 class="card-title">
+					<a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/paciente/formPaciente}" class="btn btn-primary btn-xs">Crear</a>
+				</h4>
+				<table class="table table-striped table-bordered">
+					<thead class="thead-inverse">
+						<tr>
+							<th sec:authorize="hasRole('ROLE_USER')">Id</th>
+							<th>Tipo de identificación</th>
+							<th>Número de identificación</th>
+							<th>Primer nombre</th>
+							<th>Segundo nombre</th>
+							<th>Primer apellido</th>
+							<th>Segundo apellido</th>
+							<th>Estado</th>
+							<th sec:authorize="hasRole('ROLE_ADMIN')">Editar</th>
+							<th sec:authorize="hasRole('ROLE_ADMIN')">Eliminar</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="pacienteEntity: ${pacientes}">
+							<td sec:authorize="hasRole('ROLE_USER')"><a class="btn btn-primary btn-xs" 
+							th:href="@{/paciente/verInformacionPaciente/} + ${pacienteEntity.paciente}" th:text="${pacienteEntity.paciente}"></a></td>
+							<td th:text="${pacienteEntity.paramTipoIdentificacion.descripcion}"></td>
+							<td th:text="${pacienteEntity.numeroIdentificacion}"></td>
+							<td th:text="${pacienteEntity.primerNombre}"></td>
+							<td th:text="${pacienteEntity.segundoNombre}"></td>
+							<td th:text="${pacienteEntity.primerApellido}"></td>
+							<td th:text="${pacienteEntity.segundoApellido}"></td>
+							<td th:text="${pacienteEntity.estado}"></td>
+							<td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-primary btn-xs"
+								th:href="@{/paciente/formPaciente/} + ${pacienteEntity.paciente}" th:text="'Editar'"></a></td>
+							<td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-danger btn-xs"
+								th:href="@{/eliminarPaciente/} + ${pacienteEntity.paciente}" th:text="'Eliminar'"
+								onclick="return confirm('Estas seguro que quieres eliminar?');"></a></td>
+						</tr>
+					</tbody>
+
+				</table>
+				<nav th:replace="paginator-nav :: paginator"></nav>
+			</div>
+		</div>
+
+
+	</div>
+
+	<footer th:replace="layout/layout :: footer"></footer>
+</body>
+</html>

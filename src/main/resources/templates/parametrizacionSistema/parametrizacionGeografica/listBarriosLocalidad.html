@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="layout/layout :: head"></head>
+<body>
+
+	<header th:replace="layout/layout :: header"></header>
+
+	<div class="container py-4">
+		<div class="card bg-light">
+			<div class="card-header" th:text="${lblTituloDetalleLocalidad}"></div>
+			<div class="card-body">
+				
+				<h4 class="card-title">
+					<a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-primary btn-xs" th:href="@{'/parametrizacionSistema/parametrizacionGeografica/formBarrio/localidad/' + ${localidadEntity.localidad}}" th:text="'Crear Barrio'"></a>
+					<a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-primary btn-xs" th:href="@{'/parametrizacionSistema/parametrizacionGeografica/listLocalidadesCiudad/' + ${localidadEntity.ciudadEntity.ciudad}}" th:text="'Volver'"></a>
+				</h4>
+
+				<div th:if="${#lists.isEmpty(localidadEntity.barrios)}"
+					class="alert alert-info my-4"
+					th:text="'No hay localidades'"></div>
+
+				<table th:if="${not #lists.isEmpty(localidadEntity.barrios)}"
+					class="table table-bordered table-striped my-4">
+					<thead class="thead-inverse">
+						<tr>
+							<th>Código</th>
+							<th>Descripción</th>
+							<th sec:authorize="hasRole('ROLE_ADMIN')">Editar</th>
+							<th sec:authorize="hasRole('ROLE_ADMIN')">Eliminar</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="barrioEntity: ${localidadEntity.barrios}">
+							<td th:text="${barrioEntity.codigo}"></td>
+							<td th:text="${barrioEntity.descripcion}"></td>
+							<td sec:authorize="hasRole('ROLE_ADMIN')">
+								<a class="btn btn-primary btn-xs" th:href="@{'/parametrizacionSistema/parametrizacionGeografica/formBarrio/barrio/' + ${barrioEntity.barrio}}" th:text="'Editar'"></a>
+							</td>
+							<td sec:authorize="hasRole('ROLE_ADMIN')">
+								<a class="btn btn-danger btn-xs" th:href="@{/eliminarBarrio/} + ${barrioEntity.barrio}" th:text="'Eliminar'" onclick="return confirm('¿Desea eliminar registro?');"></a>
+							</td>
+						</tr>
+					</tbody>
+
+				</table>
+
+			</div>
+		</div>
+
+	</div>
+
+	<footer th:replace="layout/layout :: footer"></footer>
+</body>
+</html>

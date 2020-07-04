@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout :: head"></head>
+<body>
+
+	<header th:replace="layout/layout :: header"></header>
+
+	<div class="container py-4">
+		<div class="card bg-dark text-white">
+			<div class="card-header" th:text="${lblTituloFormProducto}"></div>
+			<div class="alert alert-danger" th:if="${mensajeErrorProducto != null}" th:text="${mensajeErrorProducto}"></div>
+			<div class="card-body">
+				<div th:object="${productoEntity}" th:remove="tag">
+					<ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
+						<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+					</ul>
+				</div>
+				<form th:action="@{/producto/formProducto}" th:object="${productoEntity}" method="post" enctype="multipart/form-data">
+					<div class="form-group row">
+						<label for="codigo" class="col-sm-2 col-form-label">Código</label>
+						<div class="col-sm-6">
+							<input type="text" th:field="*{codigo}" class="form-control text-uppercase" th:errorclass="'form-control alert-danger'" />
+							<small class="form-text text-danger" th:if="${#fields.hasErrors('codigo')}" th:errors="*{codigo}"></small>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="descripcion" class="col-sm-2 col-form-label">Descripción</label>
+						<div class="col-sm-6">
+							<input type="text" th:field="*{descripcion}" class="form-control text-uppercase" th:errorclass="'form-control alert-danger'" />
+							<small class="form-text text-danger" th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></small>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="paramTipoProducto" class="col-sm-2 col-form-label">Tipo de Producto</label>
+						<div class="col-sm-6">
+							 <select th:field="*{paramTipoProducto}">
+	                         	<option value=""></option>
+	                         	<option th:each="paramTipoProducto : ${listaParamTipoProducto}" th:value="${paramTipoProducto.parametroProducto}" th:utext="${paramTipoProducto.descripcion}"/>
+			                 </select>
+						</div>
+					</div>					
+					<div class="form-group row">
+						<label for="paramMarca" class="col-sm-2 col-form-label">Marca</label>
+						<div class="col-sm-6">
+							 <select th:field="*{paramMarca}">
+	                         	<option value=""></option>
+	                         	<option th:each="paramMarca : ${listaParamMarca}" th:value="${paramMarca.parametroProducto}" th:utext="${paramMarca.descripcion}"/>
+			                 </select>
+						</div>
+					</div>					
+					<div class="form-group row">
+						<label for="paramCategoria" class="col-sm-2 col-form-label">Categoria</label>
+						<div class="col-sm-6">
+							 <select th:field="*{paramCategoria}">
+	                         	<option value=""></option>
+	                         	<option th:each="paramCategoria : ${listaParamCategoria}" th:value="${paramCategoria.parametroProducto}" th:utext="${paramCategoria.descripcion}"/>
+			                 </select>
+						</div>
+					</div>					
+					<div class="form-group row">
+						<label for="precio" class="col-sm-2 col-form-label">Precio</label>
+						<div class="col-sm-6">
+							<input type="text" th:field="*{precio}" class="form-control text-uppercase" th:errorclass="'form-control alert-danger'" />
+							<small class="form-text text-danger" th:if="${#fields.hasErrors('precio')}" th:errors="*{precio}"></small>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="costo" class="col-sm-2 col-form-label">Costo</label>
+						<div class="col-sm-6">
+							<input type="text" th:field="*{costo}" class="form-control text-uppercase" th:errorclass="'form-control alert-danger'" />
+							<small class="form-text text-danger" th:if="${#fields.hasErrors('costo')}" th:errors="*{costo}"></small>
+						</div>
+					</div>
+					<div class="form-group row">
+						<div class="col-sm-6">
+							<input class="btn btn-secondary" type="submit" th:value="Guardar"/>
+							<a class="btn btn-secondary btn-xs"	th:href="@{'/producto/listProducto'}" th:text="Cancelar"></a>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<footer th:replace="layout/layout :: footer"></footer>
+</body>
+</html>

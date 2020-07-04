@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="layout/layout :: head"></head>
+<body>
+
+	<header th:replace="layout/layout :: header"></header>
+
+	<div class="container py-4">
+		<div class="card bg-light">
+			<div class="card-header" th:text="${lblTituloDetalleProveedor}"></div>
+			<div class="card-body">
+				
+				<h4 class="card-title">
+					<a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-primary btn-xs" th:href="@{'/proveedor/formProveedor/' + ${proveedorEntity.proveedor}}" th:text="'Editar'"></a>
+					<a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-primary btn-xs" th:href="@{'/proveedor/listProveedor'}" th:text="'Volver'"></a>
+				</h4>
+
+				<ul class="list-group">
+					<li class="list-group-item" th:text="${proveedorEntity.numeroIdentificacion}"></li>
+					<li class="list-group-item" th:text="${proveedorEntity.razonSocial}"></li>
+				</ul>
+				
+				<div th:if="${#lists.isEmpty(proveedorEntity.documentosInventario)}"
+					class="alert alert-info my-4"
+					th:text="'No hay Documentos de Inventario asignadas para el Proveedor ' + ${proveedorEntity.razonSocial}"></div>
+
+				<table th:if="${not #lists.isEmpty(proveedorEntity.documentosInventario)}"
+					class="table table-bordered table-striped my-4">
+					<thead class="thead-dark">
+						<tr>
+							<th>Documento</th>
+							<th>Observación</th>
+							<th>total</th>
+							<th>Ver</th>
+							<th>Eliminar</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="documentoInventarioEntity: ${proveedorEntity.documentosInventario}">
+							<td th:text="${documentoInventarioEntity.documentoInventario}"></td>
+							<td th:text="${documentoInventarioEntity.observacion}"></td>
+							<td th:text="${documentoInventarioEntity.total}"></td>
+							<td><a class="btn btn-primary btn-sm" th:href="@{'/inventario/verInformacionDocumentoInventario/' + ${documentoInventarioEntity.documentoInventario}}" th:text="'Detalle'"></a></td>
+							<td><a class="btn btn-danger btn-sm" th:href="@{'/inventario/eliminarDocumentoInventario/' + ${documentoInventarioEntity.documentoInventario}}" th:text="'Eliminar'" onclick="return confirm('¿Está seguro que desea eliminar el Documento Inventario?');"></a></td>
+						</tr>
+					</tbody>
+
+				</table>
+			</div>
+		</div>
+
+	</div>
+
+	<footer th:replace="layout/layout :: footer"></footer>
+</body>
+</html>

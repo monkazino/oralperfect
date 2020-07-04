@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout :: head"></head>
+<body>
+
+	<header th:replace="layout/layout :: header"></header>
+
+	<div class="container py-4">
+
+
+		<div class="card bg-light">
+			<div class="card-header" th:text="${lblTituloFormDocumentoInventario}"></div>
+			<div class="card-body">
+
+
+				<h4 class="card-title">
+					<a th:href="@{'/proveedor/verInformacionProveedor/' + ${documentoInventarioEntity.proveedorEntity.proveedor}}"s
+						class="btn btn-light btn-xs">&laquo; volver</a>
+				</h4>
+
+				<ul class="list-group my-2">
+					<li class="list-group-item list-group-item-primary"
+						th:text="'Datos del Proveedor'"></li>
+					<li class="list-group-item" th:text="${documentoInventarioEntity.proveedorEntity.numeroIdentificacion}"></li>
+					<li class="list-group-item" th:text="${documentoInventarioEntity.proveedorEntity.razonSocial}"></li>
+				</ul>
+
+				<ul class="list-group my-2">
+					<li class="list-group-item list-group-item-success" th:text="'Datos del Documento Inventario'"></li>
+					<li class="list-group-item" th:text="'Folio: ' + ${documentoInventarioEntity.documentoInventario}"></li>
+					<li class="list-group-item" th:text="'Descripción: ' + ${documentoInventarioEntity.observacion}"></li>
+				</ul>
+				
+				<div class="alert alert-info my-4" th:if="${#lists.isEmpty(documentoInventarioEntity.itemsInventario)}" th:text="'No hay items asociados para el Documento Inventario' + ${documentoInventarioEntity.documentoInventario}"></div>
+				
+				<table th:if="${not #lists.isEmpty(documentoInventarioEntity.itemsInventario)}"
+					class="table table-striped table-hover table-bordered my-3">
+					<thead>
+						<tr>
+							<th>Producto</th>
+							<th>Precio</th>
+							<th>Cantidad</th>
+							<th>Total</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="linea: ${documentoInventarioEntity.itemsInventario}">
+							<td th:text="${linea.productoEntity.descripcion}"></td>
+							<td th:text="${linea.productoEntity.precio}"></td>
+							<td th:text="${linea.cantidad}"></td>
+							<td th:text="${linea.calcularImporte()}"></td>
+						</tr>
+					</tbody>
+
+				</table>
+
+				<h5 class="float-right">Gran Total <span th:text="${documentoInventarioEntity.total}" class="badge badge-secondary"></span></h5>
+
+				<div class="card border-info mb-4" style="max-width: 20rem;">
+					<div class="card-header">Observaciones</div>
+					<div class="card-body">
+						<p class="card-text" th:text="${documentoInventarioEntity.observacion}" th:if="${not #strings.isEmpty(documentoInventarioEntity.observacion)}"></p>
+						<h4 class="card-title" th:if="${#strings.isEmpty(documentoInventarioEntity.observacion)}" th:text="'No tiene observaciones'"></h4>
+					</div>
+				</div>
+
+				<a th:href="@{'/proveedor/verInformacionProveedor/' + ${documentoInventarioEntity.proveedorEntity.proveedor}}" class="btn btn-light btn-xs">&laquo; volver</a>
+
+			</div>
+		</div>
+
+	</div>
+	<footer th:replace="layout/layout :: footer"></footer>
+</body>
+</html>

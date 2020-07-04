@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="layout/layout :: head"></head>
+<body>
+
+	<header th:replace="layout/layout :: header"></header>
+
+	<div class="container py-4">
+		<div class="card bg-light">
+			<div class="card-header" th:text="${lblTituloDetalleDepartamento}"></div>
+			<div class="card-body">
+				
+				<h4 class="card-title">
+					<a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-primary btn-xs" th:href="@{'/parametrizacionGeografica/formCiudad/departamento/' + ${departamentoEntity.departamento}}" th:text="'Crear Ciudad'"></a>
+					<a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-primary btn-xs" th:href="@{'/parametrizacionGeografica/listDepartamentosPais/' + ${departamentoEntity.paisEntity.pais}}" th:text="'Volver'"></a>
+				</h4>
+
+				<div th:if="${#lists.isEmpty(departamentoEntity.ciudades)}"
+					class="alert alert-info my-4"
+					th:text="'No hay ciudades'"></div>
+
+				<table th:if="${not #lists.isEmpty(departamentoEntity.ciudades)}"
+					class="table table-bordered table-striped my-4">
+					<thead class="thead-inverse">
+						<tr>
+							<th>Código</th>
+							<th>Descripción</th>
+							<th sec:authorize="hasRole('ROLE_ADMIN')">Editar</th>
+							<th sec:authorize="hasRole('ROLE_ADMIN')">Eliminar</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="ciudadEntity: ${departamentoEntity.ciudades}">
+							<td th:text="${ciudadEntity.codigo}"></td>
+							<td th:text="${ciudadEntity.descripcion}"></td>
+							<td sec:authorize="hasRole('ROLE_ADMIN')">
+								<a class="btn btn-primary btn-xs" th:href="@{'/parametrizacionGeografica/formCiudad/ciudad/' + ${ciudadEntity.ciudad}}" th:text="'Editar'"></a>
+							</td>
+							<td sec:authorize="hasRole('ROLE_ADMIN')">
+								<a class="btn btn-danger btn-xs" th:href="@{/eliminarCiudad/} + ${ciudadEntity.ciudad}" th:text="'Eliminar'" onclick="return confirm('¿Desea eliminar registro?');"></a>
+							</td>
+							<td sec:authorize="hasRole('ROLE_USER')">
+								<a class="btn btn-primary btn-xs" th:href="@{/parametrizacionGeografica/listLocalidadesCiudad/} + ${ciudadEntity.ciudad}" th:text="'Localidades'"></a>
+							</td>
+						</tr>
+					</tbody>
+
+				</table>
+
+			</div>
+		</div>
+
+	</div>
+
+	<footer th:replace="layout/layout :: footer"></footer>
+</body>
+</html>

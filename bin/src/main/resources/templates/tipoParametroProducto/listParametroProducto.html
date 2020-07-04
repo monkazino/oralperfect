@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="layout/layout :: head"></head>
+<body>
+
+	<header th:replace="layout/layout :: header"></header>
+
+	<div class="container py-4">
+		<div class="card bg-light">
+			<div class="card-header" th:text="${lblTituloDetalleTipoParametroProducto}"></div>
+			<div class="card-body">
+				
+				<h4 class="card-title">
+					<a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-primary btn-xs" th:href="@{'/tipoParametroProducto/formParametroProducto/tipoParametroProducto/' + ${tipoParametroProductoEntity.tipoParametroProducto}}" th:text="'Crear Parametro'"></a>
+					<a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-primary btn-xs" th:href="@{'/tipoParametroProducto/listTipoParametroProducto'}" th:text="'Volver'"></a>
+				</h4>
+
+				<div th:if="${#lists.isEmpty(tipoParametroProductoEntity.parametrosProducto)}"
+					class="alert alert-info my-4"
+					th:text="'No hay parametros asociados'"></div>
+
+				<table th:if="${not #lists.isEmpty(tipoParametroProductoEntity.parametrosProducto)}"
+					class="table table-bordered table-striped my-4">
+					<thead class="thead-inverse">
+						<tr>
+							<th>Código</th>
+							<th>Descripción</th>
+							<th>Observación</th>
+							<th>Fecha Creación</th>
+							<th>Estado</th>
+							<th sec:authorize="hasRole('ROLE_ADMIN')">Editar</th>
+							<th sec:authorize="hasRole('ROLE_ADMIN')">Eliminar</th-->
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="parametroProductoEntity: ${tipoParametroProductoEntity.parametrosProducto}">
+							<td th:text="${parametroProductoEntity.codigo}"></td>
+							<td th:text="${parametroProductoEntity.descripcion}"></td>
+							<td th:text="${parametroProductoEntity.observacion}"></td>
+							<td th:text="${parametroProductoEntity.fechaCreacion}"></td>
+							<td th:text="${parametroProductoEntity.estado}"></td>
+							<td sec:authorize="hasRole('ROLE_ADMIN')">
+								<a class="btn btn-primary btn-xs" th:href="@{'/tipoParametroProducto/formParametroProducto/parametroProducto/' + ${parametroProductoEntity.parametroProducto}}" th:text="'Editar'"></a>
+							</td>
+							<td sec:authorize="hasRole('ROLE_ADMIN')">
+								<a class="btn btn-danger btn-xs" th:href="@{/eliminarParametroProducto/} + ${parametroProductoEntity.parametroProducto}" th:text="'Eliminar'" onclick="return confirm('¿Desea eliminar registro?');"></a>
+							</td>
+						</tr>
+					</tbody>
+
+				</table>
+
+			</div>
+		</div>
+
+	</div>
+
+	<footer th:replace="layout/layout :: footer"></footer>
+</body>
+</html>

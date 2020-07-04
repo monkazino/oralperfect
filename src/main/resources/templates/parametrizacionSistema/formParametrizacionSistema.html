@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout :: head"></head>
+<body>
+
+	<header th:replace="layout/layout :: header"></header>
+
+	<div class="container py-4">
+		<div class="card bg-dark text-white">
+			<div class="card-header" th:text="${lblTituloFormularioParametrizacionSistema}"></div>
+			<div class="alert alert-danger" th:if="${mensajeErrorParametrizacionSistema != null}" th:text="${mensajeErrorParametrizacionSistema}"></div>
+			<div class="card-body">
+				<div th:object="${parametrizacionSistemaEntity}" th:remove="tag">
+					<ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
+						<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+					</ul>
+				</div>
+
+				<form th:action="@{/parametrizacionSistema/formParametrizacionSistema}" th:object="${parametrizacionSistemaEntity}" method="post" enctype="multipart/form-data">
+					
+					<div class="form-group row">
+						<label for="codigo" class="col-sm-2 col-form-label">Código</label>
+						<div class="col-sm-6">
+							<input type="text" th:field="*{codigo}" class="form-control text-uppercase" th:errorclass="'form-control alert-danger'" />
+							<small class="form-text text-danger" th:if="${#fields.hasErrors('codigo')}" th:errors="*{codigo}"></small>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="descripcion" class="col-sm-2 col-form-label">Descripción</label>
+						<div class="col-sm-6">
+							<input type="text" th:field="*{descripcion}" class="form-control text-uppercase" th:errorclass="'form-control alert-danger'" />
+							<small class="form-text text-danger" th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></small>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="url" class="col-sm-2 col-form-label">URL</label>
+						<div class="col-sm-6">
+							<input type="text" th:field="*{url}" class="form-control" th:errorclass="'form-control alert-danger'" />
+							<small class="form-text text-danger" th:if="${#fields.hasErrors('url')}" th:errors="*{url}"></small>
+						</div>
+					</div>
+					
+					<div class="form-group row">
+						<label for="observacion" class="col-sm-2 col-form-label">Observación</label>
+						<div class="col-sm-6">
+							<input type="text" th:field="*{observacion}" class="form-control text-uppercase" th:errorclass="'form-control alert-danger'" />
+							<small class="form-text text-danger" th:if="${#fields.hasErrors('observacion')}" th:errors="*{observacion}"></small>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="fechaCreacion" class="col-sm-2 col-form-label">Fecha Creación</label>
+						<div class="col-sm-6">
+							<input type="text" class="form-control" th:field="*{fechaCreacion}" th:errorclass="'form-control alert-danger'" th:disabled="true" />
+							<small class="form-text text-danger" th:if="${#fields.hasErrors('fechaCreacion')}" th:errors="*{fechaCreacion}"></small>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="estado" class="col-sm-2 col-form-label">Estado</label>
+						<div class="col-sm-6">
+							 <select th:field="*{estado}">
+	                         	<option value=""></option>
+	                         	<option th:each="estado : ${listEstado}" th:value="${estado.key}" th:utext="${estado.value}"/>
+			                 </select>
+						</div>
+					</div>
+					<div class="form-group row">
+						<div class="col-sm-6">
+							<input class="btn btn-secondary" type="submit" th:value="Guardar"/>
+							<a class="btn btn-secondary btn-xs"	th:href="@{'/parametrizacionSistema/listParametrizacionSistema'}" th:text="Cancelar"></a>
+						</div>
+					</div>
+					
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<footer th:replace="layout/layout :: footer"></footer>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+	<table th:fragment="itemsDocumentoInventario" class="d-none">
+
+		<tbody id="plantillaItemsDocumentoInventario">
+			<tr id="row_{PRODUCTO}">
+				<td class="d-none"><input type="hidden" value="{PRODUCTO}" name="item_producto[]" /></td>
+				<td>{DESCRIPCION}</td>
+				<td>{PRECIO}</td>
+				<td><input type="number" value="1" name="cantidad[]" id="cantidad_{PRODUCTO}" class="form-control col-sm-4" onchange="itemsHelper.calcularImporte({PRODUCTO}, {PRECIO}, this.value);"/></td>
+				<td><span id="total_importe_{PRODUCTO}">0</span></td>
+				<td><a href="#" class="btn btn-danger btn-sm" onclick="itemsHelper.eliminarLineaDocumentoInventario({PRODUCTO});">x</a></td>
+			</tr>
+
+		</tbody>
+
+	</table>
+
+</body>
+</html>
