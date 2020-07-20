@@ -30,8 +30,10 @@ import com.monkazino.consultorio.app.models.entity.ItemInventarioEntity;
 import com.monkazino.consultorio.app.models.entity.TipoDocumentoInventarioEntity;
 import com.monkazino.consultorio.app.models.entity.ProveedorEntity;
 import com.monkazino.consultorio.app.models.entity.ProductoEntity;
+import com.monkazino.consultorio.app.models.entity.ProductoBodegaEntity;
 import com.monkazino.consultorio.app.models.entity.BodegaEntity;
 import com.monkazino.consultorio.app.models.service.IDocumentoInventarioService;
+import com.monkazino.consultorio.app.models.service.IProductoBodegaService;
 import com.monkazino.consultorio.app.models.service.ITipoDocumentoInventarioService;
 import com.monkazino.consultorio.app.models.service.IProductoService;
 import com.monkazino.consultorio.app.models.service.IBodegaService;
@@ -55,6 +57,9 @@ public class DocumentoInventarioController {
 	
 	@Autowired
 	private IBodegaService bodegaService;
+	
+	@Autowired
+	private IProductoBodegaService productoBodegaService;
 	
 	@Autowired
 	private ITipoDocumentoInventarioService tipoDocumentoInventarioService;
@@ -107,6 +112,7 @@ public class DocumentoInventarioController {
 		for (int i = 0; i < itemProducto.length; i++) {
 			ProductoEntity productoEntity = productoService.findOne(itemProducto[i]);
 			BodegaEntity bodegaEntity = bodegaService.findOne(1L);
+			ProductoBodegaEntity productoBodegaEntity = new ProductoBodegaEntity();
 			
 			ItemInventarioEntity itemInventnario = new ItemInventarioEntity();
 			itemInventnario.setCantidad(cantidad[i]);
@@ -114,7 +120,18 @@ public class DocumentoInventarioController {
 			itemInventnario.setBodegaEntity(bodegaEntity);
 			documentoInventarioEntity.addItemFactura(itemInventnario);
 			
-			//actualizarInventario();
+			productoBodegaEntity = productoBodegaService.consultarByProductoBodega(productoEntity.getProducto(), bodegaEntity.getBodega());
+			
+			if (productoBodegaEntity != null && productoBodegaEntity.getProductoEntity().getProducto() != null && productoBodegaEntity.getBodegaEntity().getBodega() != null) {
+				productoBodegaEntity.setCantidad(cantidad[i] + productoBodegaEntity.getCantidad());
+			} else {
+				productoBodegaEntity = new ProductoBodegaEntity();
+				productoBodegaEntity.setProductoEntity(productoEntity);
+				productoBodegaEntity.setBodegaEntity(bodegaEntity);
+				productoBodegaEntity.setCantidad(cantidad[i]);
+			}
+			productoBodegaService.save(productoBodegaEntity);
+			
 			log.info("PRODUCTO: " + itemProducto[i].toString() + ", cantidad: " + cantidad[i].toString());
 		}
 

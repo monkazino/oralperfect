@@ -11,4 +11,7 @@ import com.monkazino.consultorio.app.models.entity.ProductoBodegaEntity;
 
 public interface IProductoBodegaDao extends PagingAndSortingRepository<ProductoBodegaEntity, Long> {
 	
+	@Query("select p from ProductoBodegaEntity p where p.productoEntity.producto = :producto and p.bodegaEntity.bodega = :bodega")
+	public ProductoBodegaEntity consultarByProductoBodega(@Param("producto") Long producto, @Param("bodega") Long bodega);
+
 }

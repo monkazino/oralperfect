@@ -11,4 +11,6 @@ public interface IProductoBodegaService {
 
 	public void save(ProductoBodegaEntity productoBodegaEntity);
 	
+	public ProductoBodegaEntity consultarByProductoBodega(Long producto, Long bodega);
+
 }

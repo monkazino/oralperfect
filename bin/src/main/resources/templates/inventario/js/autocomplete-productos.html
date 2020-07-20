@@ -39,7 +39,6 @@
 					linea = linea.replace(/{PRODUCTO}/g, ui.item.value);
 					linea = linea.replace(/{DESCRIPCION}/g, ui.item.label);
 					linea = linea.replace(/{PRECIO}/g, ui.item.precio);
-
 					$("#cargarItemProductos tbody").append(linea);
 					itemsHelper.calcularImporte(ui.item.value, ui.item.precio, 1);
 
