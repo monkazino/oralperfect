@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
-import com.monkazino.consultorio.app.models.entity.DocumentoInventarioEntity;
 import com.monkazino.consultorio.app.models.entity.ProductoEntity;
 
 public interface IProductoDao extends PagingAndSortingRepository<ProductoEntity, Long> {

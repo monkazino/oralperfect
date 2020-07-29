@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.monkazino.consultorio.app.models.dao.IProductoDao;
-import com.monkazino.consultorio.app.models.entity.DocumentoInventarioEntity;
 import com.monkazino.consultorio.app.models.entity.ProductoEntity;
 import com.monkazino.consultorio.app.models.service.IProductoService;
 
